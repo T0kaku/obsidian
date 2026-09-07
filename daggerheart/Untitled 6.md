@@ -1,0 +1,1 @@
+Small drone on a larger settup that got traped was a part of a hivemind 

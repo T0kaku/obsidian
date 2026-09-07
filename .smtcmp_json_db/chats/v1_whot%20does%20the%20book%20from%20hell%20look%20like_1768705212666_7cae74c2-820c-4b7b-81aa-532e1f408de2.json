@@ -1,0 +1,51 @@
+{
+  "id": "7cae74c2-820c-4b7b-81aa-532e1f408de2",
+  "title": "whot does the book from hell look like",
+  "messages": [
+    {
+      "role": "user",
+      "content": {
+        "root": {
+          "children": [
+            {
+              "children": [
+                {
+                  "detail": 0,
+                  "format": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "text": "whot does the book from hell look like",
+                  "type": "text",
+                  "version": 1
+                }
+              ],
+              "direction": "ltr",
+              "format": "",
+              "indent": 0,
+              "type": "paragraph",
+              "version": 1,
+              "textFormat": 0,
+              "textStyle": ""
+            }
+          ],
+          "direction": "ltr",
+          "format": "",
+          "indent": 0,
+          "type": "root",
+          "version": 1
+        }
+      },
+      "promptContent": null,
+      "id": "234e41bc-1eea-4a40-93b8-f79058795d1b",
+      "mentionables": [
+        {
+          "type": "current-file",
+          "file": "dnd world tor saturday/sosions/saturday/2025.12.06,27 i was gone.md"
+        }
+      ]
+    }
+  ],
+  "createdAt": 1768705212666,
+  "updatedAt": 1768705212666,
+  "schemaVersion": 1
+}

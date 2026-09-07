@@ -1,0 +1,56 @@
+{
+  "id": "e9921955-1003-4cc9-9aa2-4d4f4fd9a4cf",
+  "title": "what did annie body dream",
+  "messages": [
+    {
+      "role": "user",
+      "content": {
+        "root": {
+          "children": [
+            {
+              "children": [
+                {
+                  "detail": 0,
+                  "format": 0,
+                  "mode": "normal",
+                  "style": "",
+                  "text": "what did annie body dream",
+                  "type": "text",
+                  "version": 1
+                }
+              ],
+              "direction": "ltr",
+              "format": "",
+              "indent": 0,
+              "type": "paragraph",
+              "version": 1,
+              "textFormat": 0,
+              "textStyle": ""
+            }
+          ],
+          "direction": "ltr",
+          "format": "",
+          "indent": 0,
+          "type": "root",
+          "version": 1
+        }
+      },
+      "promptContent": [
+        {
+          "type": "text",
+          "text": "\n\nwhat did annie body dream\n\n"
+        }
+      ],
+      "id": "92df4aaa-0976-484a-86d2-99d28a07ab0f",
+      "mentionables": [
+        {
+          "type": "current-file",
+          "file": "dnd world tor saturday/gods- and mythos/religus group/some other group.md"
+        }
+      ]
+    }
+  ],
+  "createdAt": 1768663535962,
+  "updatedAt": 1768663602199,
+  "schemaVersion": 1
+}

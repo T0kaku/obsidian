@@ -1,0 +1,4 @@
+Fløte
+Parmasan
+Bacon
+Pasta

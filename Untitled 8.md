@@ -1,0 +1,1 @@
+Paladin with Eloha god would work with druid 

@@ -1,0 +1,40 @@
+{
+	"nodes":[
+		{"id":"6444ed3d3022115c","type":"text","text":"#world1 #worldbuilding ","x":-1508,"y":-621,"width":250,"height":60},
+		{"id":"5e08b982c3a8e8d9","type":"text","text":"time one good for lesser races","x":-180,"y":-30,"width":250,"height":60},
+		{"id":"a47c00e5d0e378dc","type":"text","text":"The Founding Time -6000--2000","x":679,"y":-22,"width":281,"height":50},
+		{"id":"ba0150eaa1931c68","type":"text","text":"dawn age -30 000-24 000","x":-693,"y":-30,"width":250,"height":60},
+		{"id":"d6597e0f0488fe85","type":"text","text":"age of creation","x":-1093,"y":-30,"width":250,"height":60},
+		{"id":"9da029bd121ec2ce","type":"text","text":"the age of wonder -2000-0","x":1255,"y":-28,"width":250,"height":56},
+		{"id":"a2c62d6dcaac3e97","type":"text","text":"The **Dawn Age**, also known as the **Age of Dawn**, the **Time of Dragons**, or the **Time of titans**\ncame forth as the creator races disapeared\nlesser races where largely used as servants and slaves\nwere huge wars betwheen the titans and the dragons. the dragons where winning til the \n","x":-799,"y":-500,"width":463,"height":260},
+		{"id":"d1725ee31dc7dd45","type":"text","text":"[[hold monster city]]","x":1550,"y":200,"width":1290,"height":50},
+		{"id":"2ef895e69d32ab2d","type":"text","text":"[[move earth city]]","x":1550,"y":320,"width":1290,"height":50},
+		{"id":"7fc9d3438e79bee2","type":"text","text":"age of downfall 0-","x":1995,"y":-32,"width":250,"height":60},
+		{"id":"7b1ec08ff12f6b14","type":"text","text":"age of ruin\n","x":2435,"y":-32,"width":250,"height":60},
+		{"id":"c394552929164f83","type":"text","text":"as the fall of [[Mystryl]] came about [[mystra]] came inn and took over the rolle the gods decided that 10th level and above spells where innacasiable by mortals making great fall for humanity in magic with this came also the limit of magic making magic require great studdy and making magic rare this ledd to a hard time but eventuly the world adjusted","x":1720,"y":-489,"width":800,"height":259},
+		{"id":"a5f10af2fd2b03de","type":"text","text":"fall\n[[Karsus and the fall of magic]]\nKarsus, the greatest wizard of Netheril, created the 12th-level spell _Karsus’s Avatar_ to steal the power of Mistral, the goddess of magic, and save his empire. Instead, he shattered the Weave that sustained all magic, causing Netheril’s floating cities to fall and ending an age of wonder. Mistral sacrificed herself to restore balance, while Karsus became a cursed vestige—an eternal reminder of mortal hubris.","x":1140,"y":-440,"width":480,"height":270},
+		{"id":"30b160313cdd5fcd","type":"text","text":"[[hidden dragon city of Quark]]","x":-443,"y":580,"width":3283,"height":50},
+		{"id":"fa77e3a5ceb68365","type":"text","text":"[[orlean isled]]","x":2115,"y":120,"width":725,"height":50},
+		{"id":"c56c83ac920ed635","type":"text","text":"[[mountain city]]","x":-443,"y":680,"width":3283,"height":60},
+		{"id":"d8dc7cb203211d4d","type":"text","text":"grand war","x":240,"y":-30,"width":250,"height":60},
+		{"id":"ef8ed400c409e6d0","type":"text","text":"time of creatin and war between the gods and the planes at this time [[age of creation technology|technology]] was far more impressive than it is today(sci-fi) but most of this fell toghether with the fall of most gods and has since been burried few of the the gods that exist today know a lot about this time since most that still eksist today came into existance latter or was to withdrawn and did not care abour the mortal realms","x":-1180,"y":-500,"width":331,"height":276}
+	],
+	"edges":[
+		{"id":"5137a4d012f2d24b","fromNode":"ba0150eaa1931c68","fromSide":"top","toNode":"a2c62d6dcaac3e97","toSide":"bottom"},
+		{"id":"f5ecdb5467adec01","fromNode":"d6597e0f0488fe85","fromSide":"right","toNode":"ba0150eaa1931c68","toSide":"left"},
+		{"id":"5a84d4d5271fc657","fromNode":"ba0150eaa1931c68","fromSide":"right","toNode":"5e08b982c3a8e8d9","toSide":"left"},
+		{"id":"c8fdc5176243f629","fromNode":"5e08b982c3a8e8d9","fromSide":"right","toNode":"d8dc7cb203211d4d","toSide":"left"},
+		{"id":"311cc9a23e0772b5","fromNode":"d8dc7cb203211d4d","fromSide":"right","toNode":"a47c00e5d0e378dc","toSide":"left"},
+		{"id":"8d3676bf2a1701e4","fromNode":"a47c00e5d0e378dc","fromSide":"right","toNode":"9da029bd121ec2ce","toSide":"left"},
+		{"id":"dacf4009a67b6396","fromNode":"9da029bd121ec2ce","fromSide":"right","toNode":"7fc9d3438e79bee2","toSide":"left"},
+		{"id":"f4527c03dbb3b221","fromNode":"7fc9d3438e79bee2","fromSide":"right","toNode":"7b1ec08ff12f6b14","toSide":"left"},
+		{"id":"9faf59d735868642","fromNode":"7fc9d3438e79bee2","fromSide":"top","toNode":"c394552929164f83","toSide":"bottom"},
+		{"id":"be3e5bebc2afda10","fromNode":"9da029bd121ec2ce","fromSide":"top","toNode":"a5f10af2fd2b03de","toSide":"bottom"},
+		{"id":"5ca41e2cbfa10e45","fromNode":"9da029bd121ec2ce","fromSide":"right","toNode":"d1725ee31dc7dd45","toSide":"left"},
+		{"id":"639041fc634ba425","fromNode":"9da029bd121ec2ce","fromSide":"right","toNode":"2ef895e69d32ab2d","toSide":"left"},
+		{"id":"970c67cb6f1cab61","fromNode":"ba0150eaa1931c68","fromSide":"right","toNode":"30b160313cdd5fcd","toSide":"left"},
+		{"id":"424d7f543d79be06","fromNode":"7fc9d3438e79bee2","fromSide":"bottom","toNode":"fa77e3a5ceb68365","toSide":"left"},
+		{"id":"caef135e6397484e","fromNode":"ba0150eaa1931c68","fromSide":"right","toNode":"c56c83ac920ed635","toSide":"left"},
+		{"id":"ecc33c2437c49c64","fromNode":"d6597e0f0488fe85","fromSide":"top","toNode":"ef8ed400c409e6d0","toSide":"bottom"}
+	]
+}

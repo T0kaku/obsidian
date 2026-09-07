@@ -1,0 +1,1 @@
+sun wukong is able to pull things from bs his master hetting him 3 times he is able to desipher into the master wanting him to sneak into the back dor during the third watch 

@@ -1,0 +1,1 @@
+I was part of a family but my parents made a deal with levistus and by turn later in life when I was born I then by chance became a tie fling I was thrown out and a group of traveling bums living of what they could gather and earn performing on the street being a tie fling of levistus also gives him somewhat ownership over me

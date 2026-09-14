@@ -4,38 +4,38 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Your name — Portfolio</title>
+  <title>T0kaku — Portfolio</title>
   <meta
     name="description"
-    content="A portfolio showcasing my projects, skills and experience."
+    content="T0kaku's portfolio showcasing projects, skills and experience."
   />
 
   <style>
-    /* =========================
-       VARIABLES
-    ========================= */
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
     :root {
-      --bg: #09090b;
-      --bg-soft: #111113;
-      --card: #151518;
-      --card-hover: #1b1b1f;
+      --black: #050607;
+      --black-2: #090b0c;
+      --panel: #0d1110;
+      --panel-2: #111615;
 
-      --text: #f5f5f5;
-      --text-muted: #9a9aa3;
+      --white: #e9eee9;
+      --muted: #87918c;
 
-      --border: rgba(255, 255, 255, 0.09);
+      --green: #a6ff00;
+      --green-soft: #78b900;
 
-      --accent: #8b5cf6;
-      --accent-light: #a78bfa;
+      --purple: #8f4cff;
+      --purple-light: #b88aff;
 
-      --radius: 18px;
-      --max-width: 1150px;
+      --orange: #ff8a00;
+      --red: #ff3030;
+
+      --line: rgba(166, 255, 0, 0.18);
+      --line-white: rgba(255,255,255,.08);
+
+      --max-width: 1200px;
     }
-
-    /* =========================
-       RESET
-    ========================= */
 
     * {
       margin: 0;
@@ -48,18 +48,65 @@
     }
 
     body {
+      background:
+        radial-gradient(
+          circle at 75% 10%,
+          rgba(143, 76, 255, .10),
+          transparent 30%
+        ),
+        var(--black);
+
+      color: var(--white);
+
       font-family:
-        Inter,
-        ui-sans-serif,
+        "Space Grotesk",
         system-ui,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
         sans-serif;
 
-      background: var(--bg);
-      color: var(--text);
       line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* =========================
+       TECHNICAL GRID
+    ========================= */
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+
+      background-image:
+        linear-gradient(
+          rgba(166,255,0,.025) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          90deg,
+          rgba(166,255,0,.025) 1px,
+          transparent 1px
+        );
+
+      background-size: 45px 45px;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+
+      background:
+        linear-gradient(
+          rgba(255,255,255,.015) 50%,
+          transparent 50%
+        );
+
+      background-size: 100% 4px;
+      opacity: .15;
     }
 
     a {
@@ -67,13 +114,8 @@
       text-decoration: none;
     }
 
-    img {
-      max-width: 100%;
-      display: block;
-    }
-
     /* =========================
-       NAVIGATION
+       NAV
     ========================= */
 
     nav {
@@ -81,51 +123,81 @@
       top: 0;
       left: 0;
       right: 0;
+
       z-index: 100;
 
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+      background: rgba(5,6,7,.88);
+      backdrop-filter: blur(16px);
 
-      background: rgba(9, 9, 11, 0.75);
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--line);
     }
 
     .nav-inner {
       max-width: var(--max-width);
+      height: 70px;
+
       margin: auto;
-      height: 72px;
+      padding: 0 24px;
 
       display: flex;
       align-items: center;
       justify-content: space-between;
-
-      padding: 0 24px;
     }
 
     .logo {
+      font-family: "JetBrains Mono", monospace;
       font-size: 18px;
       font-weight: 700;
-      letter-spacing: -0.5px;
+
+      letter-spacing: 2px;
+      color: var(--green);
     }
 
-    .logo span {
-      color: var(--accent-light);
+    .logo::before {
+      content: "SYSTEM://";
+      color: var(--muted);
+      font-size: 10px;
+      margin-right: 8px;
     }
 
     .nav-links {
       display: flex;
-      gap: 30px;
+      gap: 28px;
       list-style: none;
     }
 
     .nav-links a {
-      color: var(--text-muted);
-      font-size: 14px;
-      transition: 0.2s ease;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+
+      color: var(--muted);
+
+      transition: .2s;
+    }
+
+    .nav-links a::before {
+      content: "[";
+      color: var(--green);
+      opacity: 0;
+      margin-right: 4px;
+    }
+
+    .nav-links a::after {
+      content: "]";
+      color: var(--green);
+      opacity: 0;
+      margin-left: 4px;
     }
 
     .nav-links a:hover {
-      color: var(--text);
+      color: var(--green);
+    }
+
+    .nav-links a:hover::before,
+    .nav-links a:hover::after {
+      opacity: 1;
     }
 
     /* =========================
@@ -134,59 +206,113 @@
 
     .hero {
       max-width: var(--max-width);
-      margin: auto;
+      min-height: 100vh;
 
-      min-height: 90vh;
-      padding: 160px 24px 100px;
+      margin: auto;
+      padding: 150px 24px 100px;
 
       display: flex;
       align-items: center;
+
+      position: relative;
+    }
+
+    .hero::before {
+      content: "01 / INITIALIZE";
+
+      position: absolute;
+      top: 115px;
+      left: 24px;
+
+      font-family: "JetBrains Mono";
+      font-size: 10px;
+      letter-spacing: 2px;
+
+      color: var(--green);
     }
 
     .hero-content {
-      max-width: 760px;
+      max-width: 850px;
     }
 
     .eyebrow {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
 
-      color: var(--accent-light);
-      font-size: 14px;
-      font-weight: 600;
+      margin-bottom: 25px;
 
-      margin-bottom: 24px;
+      font-family: "JetBrains Mono";
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+
+      color: var(--green);
+
+      border: 1px solid var(--line);
+      padding: 8px 12px;
+
+      background: rgba(166,255,0,.03);
     }
 
     .status-dot {
       width: 7px;
       height: 7px;
+
+      background: var(--green);
       border-radius: 50%;
-      background: #4ade80;
-      box-shadow: 0 0 12px #4ade80;
+
+      box-shadow: 0 0 12px var(--green);
+
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0%,100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: .3;
+      }
     }
 
     .hero h1 {
-      font-size: clamp(48px, 8vw, 88px);
-      line-height: 0.98;
-      letter-spacing: -4px;
+      font-size: clamp(55px, 10vw, 125px);
+      line-height: .88;
 
-      margin-bottom: 28px;
+      letter-spacing: -7px;
+
+      text-transform: uppercase;
+
+      margin-bottom: 35px;
     }
 
     .hero h1 span {
-      color: var(--accent-light);
+      color: var(--purple-light);
+
+      text-shadow:
+        0 0 25px rgba(143,76,255,.35);
     }
 
     .hero-description {
-      max-width: 600px;
+      max-width: 650px;
 
-      color: var(--text-muted);
-      font-size: 18px;
+      color: var(--muted);
 
-      margin-bottom: 36px;
+      font-family: "JetBrains Mono";
+      font-size: 14px;
+
+      border-left: 2px solid var(--green);
+
+      padding-left: 18px;
+
+      margin-bottom: 35px;
     }
+
+    /* =========================
+       BUTTONS
+    ========================= */
 
     .hero-buttons {
       display: flex;
@@ -199,173 +325,279 @@
       align-items: center;
       justify-content: center;
 
-      padding: 12px 20px;
-      border-radius: 10px;
+      padding: 13px 20px;
 
-      font-size: 14px;
-      font-weight: 600;
+      font-family: "JetBrains Mono";
+      font-size: 11px;
+      font-weight: 700;
 
-      transition: 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+
+      transition: .2s;
     }
 
     .button-primary {
-      background: var(--text);
-      color: var(--bg);
+      background: var(--green);
+      color: #050607;
+
+      clip-path: polygon(
+        0 0,
+        calc(100% - 10px) 0,
+        100% 10px,
+        100% 100%,
+        10px 100%,
+        0 calc(100% - 10px)
+      );
     }
 
     .button-primary:hover {
+      box-shadow: 0 0 25px rgba(166,255,0,.35);
       transform: translateY(-2px);
-      opacity: 0.9;
     }
 
     .button-secondary {
-      border: 1px solid var(--border);
-      color: var(--text);
+      border: 1px solid var(--line);
+      color: var(--green);
+
+      background: rgba(166,255,0,.025);
     }
 
     .button-secondary:hover {
-      background: var(--card);
+      background: rgba(166,255,0,.08);
     }
 
     /* =========================
-       SECTIONS
+       SECTION
     ========================= */
 
     section {
       max-width: var(--max-width);
+
       margin: auto;
-      padding: 100px 24px;
+      padding: 110px 24px;
+
+      position: relative;
     }
 
     .section-header {
       margin-bottom: 45px;
+
+      border-bottom: 1px solid var(--line-white);
+
+      padding-bottom: 22px;
     }
 
     .section-label {
-      color: var(--accent-light);
-      font-size: 13px;
+      font-family: "JetBrains Mono";
+      font-size: 10px;
       font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
 
-      margin-bottom: 10px;
+      color: var(--green);
+
+      text-transform: uppercase;
+      letter-spacing: 2px;
+
+      margin-bottom: 8px;
     }
 
     .section-title {
-      font-size: 38px;
-      letter-spacing: -1.5px;
+      font-size: 45px;
+      letter-spacing: -2px;
+      text-transform: uppercase;
     }
 
     .section-description {
-      color: var(--text-muted);
-      max-width: 550px;
-      margin-top: 10px;
+      color: var(--muted);
+      max-width: 600px;
+
+      margin-top: 8px;
+
+      font-family: "JetBrains Mono";
+      font-size: 12px;
     }
 
     /* =========================
-       PROJECT GRID
+       PROJECTS
     ========================= */
 
     .projects-grid {
       display: grid;
-
-      grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-
-      gap: 20px;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 18px;
     }
 
     .project {
-      background: var(--card);
-      border: 1px solid var(--border);
+      background: var(--panel);
 
-      border-radius: var(--radius);
+      border: 1px solid var(--line-white);
+
+      position: relative;
+
+      transition: .25s;
+
       overflow: hidden;
+    }
 
-      transition:
-        transform 0.25s ease,
-        background 0.25s ease,
-        border-color 0.25s ease;
+    .project::before {
+      content: "PROJECT_NODE";
+
+      position: absolute;
+
+      top: 12px;
+      left: 15px;
+
+      z-index: 2;
+
+      font-family: "JetBrains Mono";
+      font-size: 8px;
+
+      color: var(--green);
+
+      letter-spacing: 1px;
+    }
+
+    .project::after {
+      content: "◆";
+
+      position: absolute;
+
+      right: 15px;
+      top: 10px;
+
+      color: var(--purple-light);
+
+      font-size: 10px;
     }
 
     .project:hover {
+      border-color: rgba(166,255,0,.35);
       transform: translateY(-5px);
-      background: var(--card-hover);
-      border-color: rgba(255, 255, 255, 0.15);
+
+      box-shadow:
+        0 15px 40px rgba(0,0,0,.35);
     }
 
     .project-image {
-      height: 280px;
+      height: 275px;
 
       display: flex;
       align-items: center;
       justify-content: center;
 
       background:
-        radial-gradient(
-          circle at 30% 20%,
-          rgba(139, 92, 246, 0.25),
-          transparent 35%
+        linear-gradient(
+          135deg,
+          rgba(143,76,255,.20),
+          transparent 50%
         ),
-        #0e0e11;
+        #090c0b;
 
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--line-white);
 
-      color: var(--text-muted);
-      font-size: 14px;
+      color: var(--muted);
+
+      font-family: "JetBrains Mono";
+      font-size: 11px;
+
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-image::after {
+      content: "VISUAL_DATA";
+
+      position: absolute;
+      bottom: 10px;
+      right: 12px;
+
+      font-size: 8px;
+      color: var(--green);
+
+      opacity: .7;
     }
 
     .project-image img {
       width: 100%;
       height: 100%;
+
       object-fit: cover;
+
+      opacity: .85;
+
+      transition: .4s;
+    }
+
+    .project:hover .project-image img {
+      transform: scale(1.04);
+      opacity: 1;
     }
 
     .project-content {
-      padding: 24px;
+      padding: 25px;
     }
 
     .project-title {
-      font-size: 21px;
+      font-size: 22px;
+
+      text-transform: uppercase;
+      letter-spacing: -.5px;
+
       margin-bottom: 8px;
     }
 
     .project-description {
-      color: var(--text-muted);
-      font-size: 14px;
+      color: var(--muted);
+
+      font-family: "JetBrains Mono";
+      font-size: 12px;
+
       margin-bottom: 20px;
     }
 
     .tags {
       display: flex;
-      gap: 7px;
       flex-wrap: wrap;
-      margin-bottom: 22px;
+
+      gap: 7px;
+
+      margin-bottom: 23px;
     }
 
     .tag {
-      padding: 5px 9px;
+      padding: 5px 8px;
 
-      border-radius: 7px;
-      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--line-white);
 
-      color: #c5c5cb;
-      font-size: 12px;
+      color: #aab3ae;
+
+      font-family: "JetBrains Mono";
+      font-size: 9px;
+
+      text-transform: uppercase;
+    }
+
+    .tag::before {
+      content: "#";
+      color: var(--green);
     }
 
     .project-links {
       display: flex;
-      gap: 18px;
+      gap: 20px;
     }
 
     .project-link {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text);
+      font-family: "JetBrains Mono";
+      font-size: 10px;
+
+      text-transform: uppercase;
+
+      color: var(--green);
     }
 
     .project-link:hover {
-      color: var(--accent-light);
+      color: var(--purple-light);
     }
 
     /* =========================
@@ -374,35 +606,63 @@
 
     .about {
       display: grid;
+
       grid-template-columns: 1fr 1fr;
+
       gap: 70px;
-      align-items: start;
     }
 
     .about-text {
-      color: var(--text-muted);
-      font-size: 16px;
+      color: var(--muted);
+
+      font-family: "JetBrains Mono";
+      font-size: 13px;
     }
 
     .about-text p + p {
       margin-top: 18px;
     }
 
+    .about-text::before {
+      content: "PERSONNEL_FILE // T0KAKU";
+
+      display: block;
+
+      color: var(--green);
+
+      font-size: 9px;
+      letter-spacing: 2px;
+
+      margin-bottom: 20px;
+    }
+
     .skills {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 8px;
     }
 
     .skill {
-      border: 1px solid var(--border);
-      background: var(--card);
+      border: 1px solid var(--line);
 
-      padding: 9px 13px;
-      border-radius: 9px;
+      background: rgba(166,255,0,.025);
 
-      font-size: 13px;
-      color: #d0d0d5;
+      padding: 9px 12px;
+
+      font-family: "JetBrains Mono";
+      font-size: 10px;
+
+      color: #c9d0cb;
+
+      transition: .2s;
+    }
+
+    .skill:hover {
+      color: var(--green);
+
+      border-color: var(--green);
+
+      background: rgba(166,255,0,.06);
     }
 
     /* =========================
@@ -410,28 +670,69 @@
     ========================= */
 
     .contact-box {
-      padding: 60px;
+      padding: 55px;
 
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
+      border: 1px solid var(--line);
 
       background:
-        radial-gradient(
-          circle at 70% 30%,
-          rgba(139, 92, 246, 0.15),
-          transparent 35%
+        linear-gradient(
+          120deg,
+          rgba(143,76,255,.12),
+          transparent 50%
         ),
-        var(--card);
+        var(--panel);
+
+      position: relative;
+
+      overflow: hidden;
+    }
+
+    .contact-box::before {
+      content: "COMMUNICATION TERMINAL";
+
+      position: absolute;
+
+      top: 15px;
+      right: 20px;
+
+      color: var(--green);
+
+      font-family: "JetBrains Mono";
+      font-size: 8px;
+      letter-spacing: 2px;
+    }
+
+    .contact-box::after {
+      content: "SYSTEM READY";
+
+      position: absolute;
+
+      bottom: 15px;
+      right: 20px;
+
+      color: var(--green);
+
+      font-family: "JetBrains Mono";
+      font-size: 8px;
     }
 
     .contact-box h2 {
-      font-size: 42px;
-      letter-spacing: -1.5px;
-      margin-bottom: 12px;
+      font-size: 48px;
+
+      text-transform: uppercase;
+      letter-spacing: -2px;
+
+      margin-bottom: 10px;
     }
 
     .contact-box p {
-      color: var(--text-muted);
+      color: var(--muted);
+
+      font-family: "JetBrains Mono";
+      font-size: 12px;
+
+      max-width: 600px;
+
       margin-bottom: 25px;
     }
 
@@ -441,18 +742,22 @@
 
     footer {
       max-width: var(--max-width);
+
       margin: auto;
 
       padding: 30px 24px 45px;
 
       display: flex;
-      align-items: center;
       justify-content: space-between;
 
-      border-top: 1px solid var(--border);
+      border-top: 1px solid var(--line-white);
 
-      color: var(--text-muted);
-      font-size: 13px;
+      color: var(--muted);
+
+      font-family: "JetBrains Mono";
+      font-size: 9px;
+
+      text-transform: uppercase;
     }
 
     .social-links {
@@ -461,25 +766,30 @@
     }
 
     .social-links a:hover {
-      color: var(--text);
+      color: var(--green);
     }
 
     /* =========================
-       RESPONSIVE
+       MOBILE
     ========================= */
 
     @media (max-width: 750px) {
+
       .nav-links {
         display: none;
       }
 
       .hero {
-        min-height: auto;
         padding-top: 140px;
       }
 
       .hero h1 {
-        letter-spacing: -2.5px;
+        font-size: 58px;
+        letter-spacing: -4px;
+      }
+
+      .hero-description {
+        font-size: 11px;
       }
 
       .projects-grid {
@@ -491,18 +801,21 @@
         gap: 40px;
       }
 
+      .section-title {
+        font-size: 35px;
+      }
+
       .contact-box {
         padding: 35px 25px;
       }
 
       .contact-box h2 {
-        font-size: 32px;
+        font-size: 34px;
       }
 
       footer {
         flex-direction: column;
         gap: 20px;
-        align-items: flex-start;
       }
     }
   </style>
@@ -510,15 +823,13 @@
 
 <body>
 
-  <!-- =========================
-       NAVIGATION
-  ========================== -->
+  <!-- NAVIGATION -->
 
   <nav>
     <div class="nav-inner">
 
       <a href="#" class="logo">
-        T0kaku<span>
+        T0kaku
       </a>
 
       <ul class="nav-links">
@@ -531,9 +842,7 @@
   </nav>
 
 
-  <!-- =========================
-       HERO
-  ========================== -->
+  <!-- HERO -->
 
   <header class="hero">
 
@@ -541,11 +850,11 @@
 
       <div class="eyebrow">
         <span class="status-dot"></span>
-        Available for new projects
+        System online // Available
       </div>
 
       <h1>
-        T0kaku's<br />
+        T0kaku's<br>
         <span>portfolio</span>
       </h1>
 
@@ -555,13 +864,15 @@
       </p>
 
       <div class="hero-buttons">
+
         <a href="#projects" class="button button-primary">
-          View my work
+          [ View my work ]
         </a>
 
         <a href="#contact" class="button button-secondary">
-          Get in touch
+          [ Get in touch ]
         </a>
+
       </div>
 
     </div>
@@ -569,16 +880,14 @@
   </header>
 
 
-  <!-- =========================
-       PROJECTS
-  ========================== -->
+  <!-- PROJECTS -->
 
   <section id="projects">
 
     <div class="section-header">
 
       <div class="section-label">
-        Selected work
+        02 / Selected work
       </div>
 
       <h2 class="section-title">
@@ -596,11 +905,16 @@
 
 
       <!-- PROJECT 01 -->
+
       <article class="project">
 
         <div class="project-image">
-          <img src="dnd world my/atachment/Pasted image 20250903191839.png">
-          
+
+          <img
+            src="dnd world my/atachment/Pasted image 20250903191839.png"
+            alt="Project One preview"
+          >
+
         </div>
 
         <div class="project-content">
@@ -621,6 +935,7 @@
           </div>
 
           <div class="project-links">
+
             <a href="#" class="project-link">
               Live Demo →
             </a>
@@ -628,6 +943,7 @@
             <a href="#" class="project-link">
               GitHub →
             </a>
+
           </div>
 
         </div>
@@ -636,10 +952,11 @@
 
 
       <!-- PROJECT 02 -->
+
       <article class="project">
 
         <div class="project-image">
-          Project Preview
+          PROJECT PREVIEW
         </div>
 
         <div class="project-content">
@@ -660,6 +977,7 @@
           </div>
 
           <div class="project-links">
+
             <a href="#" class="project-link">
               Live Demo →
             </a>
@@ -667,6 +985,7 @@
             <a href="#" class="project-link">
               GitHub →
             </a>
+
           </div>
 
         </div>
@@ -675,10 +994,11 @@
 
 
       <!-- PROJECT 03 -->
+
       <article class="project">
 
         <div class="project-image">
-          Project Preview
+          PROJECT PREVIEW
         </div>
 
         <div class="project-content">
@@ -693,14 +1013,18 @@
           </p>
 
           <div class="tags">
+
             <span class="tag">Python</span>
             <span class="tag">AI</span>
+
           </div>
 
           <div class="project-links">
+
             <a href="#" class="project-link">
               View Project →
             </a>
+
           </div>
 
         </div>
@@ -709,10 +1033,11 @@
 
 
       <!-- PROJECT 04 -->
+
       <article class="project">
 
         <div class="project-image">
-          Project Preview
+          PROJECT PREVIEW
         </div>
 
         <div class="project-content">
@@ -727,11 +1052,14 @@
           </p>
 
           <div class="tags">
+
             <span class="tag">Next.js</span>
             <span class="tag">Node.js</span>
+
           </div>
 
           <div class="project-links">
+
             <a href="#" class="project-link">
               Live Demo →
             </a>
@@ -739,32 +1067,30 @@
             <a href="#" class="project-link">
               GitHub →
             </a>
+
           </div>
 
         </div>
 
       </article>
 
-
     </div>
 
   </section>
 
 
-  <!-- =========================
-       ABOUT
-  ========================== -->
+  <!-- ABOUT -->
 
   <section id="about">
 
     <div class="section-header">
 
       <div class="section-label">
-        About me
+        03 / Personnel
       </div>
 
       <h2 class="section-title">
-        A little about me
+        About me
       </h2>
 
     </div>
@@ -790,7 +1116,7 @@
       <div>
 
         <div class="section-label">
-          Technologies
+          Technologies // Loaded
         </div>
 
         <div class="skills">
@@ -814,16 +1140,14 @@
   </section>
 
 
-  <!-- =========================
-       CONTACT
-  ========================== -->
+  <!-- CONTACT -->
 
   <section id="contact">
 
     <div class="contact-box">
 
       <div class="section-label">
-        Contact
+        04 / Communication
       </div>
 
       <h2>
@@ -839,7 +1163,7 @@
         href="mailto:T0kaku@proton.me"
         class="button button-primary"
       >
-        Send me an email
+        Send me an email →
       </a>
 
     </div>
@@ -847,14 +1171,12 @@
   </section>
 
 
-  <!-- =========================
-       FOOTER
-  ========================== -->
+  <!-- FOOTER -->
 
   <footer>
 
     <span>
-      © 2026 Your Name
+      © 2026 T0kaku // All systems operational
     </span>
 
     <div class="social-links">
@@ -874,7 +1196,6 @@
     </div>
 
   </footer>
-
 
 </body>
 </html>

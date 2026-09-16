@@ -5,40 +5,41 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>T0kaku // SYSTEM INTERFACE</title>
+<title>T0kaku // HEX SYSTEM</title>
 
 <style>
 
-/* =========================================================
-   T0KAKU // VISUAL SYSTEM
-   Original sci-fi / Evangelion-inspired interface
-   ========================================================= */
-
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap');
 
+
+/* =========================================================
+   CORE
+========================================================= */
+
 :root {
-    --void: #050308;
-    --void-2: #09050e;
+    --bg: #040207;
+    --bg2: #09050d;
 
-    --purple: #8d35ff;
-    --violet: #b866ff;
-    --magenta: #e33cff;
+    --purple: #8b35ff;
+    --purple-light: #c477ff;
+    --purple-dark: #42127a;
 
-    --white: #f7efff;
-    --grey: #817688;
-    --dim: #332a38;
+    --pink: #ed3dff;
 
-    --red: #ff304f;
-    --orange: #ff7426;
+    --white: #f5edff;
+    --grey: #776d80;
+    --dark: #241b2b;
 
-    --grid: rgba(166, 78, 255, .14);
-    --line: rgba(190, 105, 255, .42);
+    --danger: #ff3153;
+
+    --line: rgba(164, 77, 255, .38);
+    --soft-line: rgba(164, 77, 255, .12);
 }
 
 
 /* =========================================================
    RESET
-   ========================================================= */
+========================================================= */
 
 * {
     box-sizing: border-box;
@@ -51,12 +52,12 @@ html {
 }
 
 body {
-    background: var(--void);
+    background: var(--bg);
     color: var(--white);
 
     font-family:
         "Barlow Condensed",
-        "Arial Narrow",
+        Arial Narrow,
         sans-serif;
 
     overflow-x: hidden;
@@ -67,15 +68,10 @@ a {
     text-decoration: none;
 }
 
-button,
-a {
-    -webkit-tap-highlight-color: transparent;
-}
-
 
 /* =========================================================
-   GLOBAL CRT / SCAN EFFECT
-   ========================================================= */
+   CRT
+========================================================= */
 
 body::before {
     content: "";
@@ -90,15 +86,13 @@ body::before {
     background:
         repeating-linear-gradient(
             to bottom,
-            rgba(255,255,255,.018) 0px,
-            rgba(255,255,255,.018) 1px,
+            rgba(255,255,255,.025) 0,
+            rgba(255,255,255,.025) 1px,
             transparent 1px,
             transparent 4px
         );
 
-    mix-blend-mode: screen;
-
-    opacity: .3;
+    opacity: .28;
 }
 
 body::after {
@@ -109,25 +103,20 @@ body::after {
 
     pointer-events: none;
 
-    z-index: -5;
+    z-index: -10;
 
-    background-image:
-        linear-gradient(var(--grid) 1px, transparent 1px),
-        linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-
-    background-size: 90px 90px;
-
-    mask-image: linear-gradient(
-        to bottom,
-        black,
-        transparent 85%
-    );
+    background:
+        radial-gradient(
+            circle at 50% 30%,
+            rgba(110,35,180,.08),
+            transparent 40%
+        );
 }
 
 
 /* =========================================================
-   HEXAGON SHAPE
-   ========================================================= */
+   HEXAGON ENGINE
+========================================================= */
 
 .hex {
     clip-path: polygon(
@@ -140,161 +129,237 @@ body::after {
     );
 }
 
+.hex-outline {
+    position: relative;
+
+    clip-path: polygon(
+        25% 0%,
+        75% 0%,
+        100% 50%,
+        75% 100%,
+        25% 100%,
+        0% 50%
+    );
+
+    background: var(--line);
+}
+
+.hex-outline::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 1px;
+
+    background: var(--bg2);
+
+    clip-path: inherit;
+}
+
 
 /* =========================================================
-   VERTICAL SYSTEM RAIL
-   ========================================================= */
+   HEX GRID BACKGROUND
+========================================================= */
 
-.system-rail {
+.hex-background {
+    position: fixed;
+
+    inset: -100px;
+
+    z-index: -5;
+
+    opacity: .25;
+
+    pointer-events: none;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(18, 70px);
+
+    grid-auto-rows: 61px;
+
+    transform:
+        rotate(-2deg)
+        scale(1.1);
+}
+
+.hex-background span {
+    width: 68px;
+    height: 78px;
+
+    border: 1px solid var(--soft-line);
+
+    clip-path: polygon(
+        25% 0,
+        75% 0,
+        100% 50%,
+        75% 100%,
+        25% 100%,
+        0 50%
+    );
+}
+
+.hex-background span:nth-child(even) {
+    transform: translateY(30px);
+}
+
+
+/* =========================================================
+   LEFT COMMAND SPINE
+========================================================= */
+
+.spine {
     position: fixed;
 
     left: 0;
     top: 0;
     bottom: 0;
 
-    width: 68px;
+    width: 70px;
 
     z-index: 500;
 
     border-right: 1px solid var(--line);
 
-    background:
-        linear-gradient(
-            180deg,
-            #09050d,
-            #030205
-        );
+    background: rgba(4,2,7,.94);
 
     display: flex;
+
     flex-direction: column;
+
     align-items: center;
 
-    padding: 15px 0;
+    padding-top: 15px;
 }
 
-.rail-mark {
-    width: 38px;
-    height: 38px;
+.spine-logo {
+    width: 42px;
+    height: 48px;
 
     background: var(--purple);
 
-    color: #fff;
-
     display: grid;
+
     place-items: center;
 
     font-family: "Space Mono";
+
     font-size: 10px;
-    font-weight: 700;
 
     clip-path: polygon(
-        20% 0,
-        80% 0,
-        100% 20%,
-        100% 80%,
-        80% 100%,
-        20% 100%,
-        0 80%,
-        0 20%
+        25% 0,
+        75% 0,
+        100% 50%,
+        75% 100%,
+        25% 100%,
+        0 50%
     );
 
     box-shadow:
-        0 0 25px rgba(141,53,255,.6);
+        0 0 30px rgba(139,53,255,.45);
 }
 
-.rail-line {
+.spine-line {
     width: 1px;
-    height: 90px;
+
+    height: 80px;
+
+    margin: 15px 0;
 
     background:
         linear-gradient(
             var(--purple),
             transparent
         );
-
-    margin: 20px 0;
 }
 
-.rail-links {
+.spine-nav {
     display: flex;
+
     flex-direction: column;
 
-    gap: 4px;
+    gap: 5px;
 
     width: 100%;
 }
 
-.rail-links a {
+.spine-nav a {
+    height: 90px;
+
     writing-mode: vertical-rl;
 
     transform: rotate(180deg);
 
-    height: 90px;
+    display: grid;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    color: var(--grey);
+    place-items: center;
 
     font-family: "Space Mono";
+
     font-size: 7px;
 
     letter-spacing: 2px;
 
-    transition: .2s;
+    color: var(--grey);
 }
 
-.rail-links a:hover {
-    color: var(--violet);
+.spine-nav a:hover {
+    color: var(--purple-light);
 
     background:
         linear-gradient(
             90deg,
             transparent,
-            rgba(141,53,255,.15)
+            rgba(139,53,255,.16)
         );
 }
 
-.rail-bottom {
+.spine-bottom {
     margin-top: auto;
 
     writing-mode: vertical-rl;
 
+    color: var(--dark);
+
     font-family: "Space Mono";
+
     font-size: 6px;
 
-    color: var(--dim);
-
     letter-spacing: 3px;
+
+    margin-bottom: 20px;
 }
 
 
 /* =========================================================
    MAIN
-   ========================================================= */
+========================================================= */
 
 main {
-    margin-left: 68px;
+    margin-left: 70px;
 }
 
 
 /* =========================================================
-   TOP DATA STRIP
-   ========================================================= */
+   TOP BAR
+========================================================= */
 
-.top-strip {
-    height: 32px;
+.topbar {
+    height: 34px;
 
     border-bottom: 1px solid var(--line);
 
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
 
     padding: 0 25px;
 
     font-family: "Space Mono";
+
     font-size: 7px;
 
     color: var(--grey);
@@ -302,35 +367,37 @@ main {
     letter-spacing: 1px;
 }
 
-.top-strip .signal {
-    color: var(--violet);
+.topbar strong {
+    color: var(--purple-light);
 }
 
-.signal::before {
+.online::before {
     content: "";
-
-    display: inline-block;
 
     width: 5px;
     height: 5px;
 
+    display: inline-block;
+
     background: var(--purple);
 
-    margin-right: 7px;
+    border-radius: 50%;
+
+    margin-right: 6px;
 
     box-shadow:
-        0 0 10px var(--purple);
+        0 0 12px var(--purple);
 }
 
 
 /* =========================================================
-   HERO
-   ========================================================= */
+   HERO HEX FIELD
+========================================================= */
 
 .hero {
-    position: relative;
+    min-height: 100vh;
 
-    min-height: 930px;
+    position: relative;
 
     overflow: hidden;
 
@@ -338,228 +405,181 @@ main {
 }
 
 
-/* HUGE NUMBER */
+/* GIANT HEX */
 
-.hero-number {
+.hero-hex {
     position: absolute;
 
-    left: 3vw;
-    top: 40px;
+    width: 780px;
+    height: 900px;
 
-    font-size: clamp(220px, 35vw, 600px);
-
-    font-weight: 900;
-
-    line-height: .7;
-
-    color: rgba(141,53,255,.035);
-
-    letter-spacing: -30px;
-
-    user-select: none;
-}
-
-
-/* DIAGONAL PURPLE FIELD */
-
-.hero-diagonal {
-    position: absolute;
-
-    width: 75%;
-    height: 500px;
-
-    right: -20%;
-    top: 160px;
+    right: -120px;
+    top: -100px;
 
     background:
         linear-gradient(
-            135deg,
-            transparent 0%,
-            rgba(141,53,255,.08) 45%,
-            rgba(141,53,255,.22) 100%
+            145deg,
+            rgba(139,53,255,.18),
+            rgba(20,5,30,.04)
         );
 
-    transform: skewX(-25deg);
+    clip-path: polygon(
+        25% 0,
+        75% 0,
+        100% 50%,
+        75% 100%,
+        25% 100%,
+        0 50%
+    );
 
-    border-top: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
+    opacity: .75;
+}
+
+.hero-hex::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 25px;
+
+    border: 1px solid var(--line);
+
+    clip-path: inherit;
 }
 
 
 /* TITLE */
 
-.hero-title {
-    position: absolute;
-
-    left: 8vw;
-    top: 170px;
+.hero-content {
+    position: relative;
 
     z-index: 5;
+
+    padding:
+        17vh
+        7vw
+        10vh;
 }
 
-.hero-title .small {
+.kicker {
     font-family: "Space Mono";
 
-    color: var(--violet);
+    font-size: 8px;
 
-    font-size: 9px;
+    color: var(--purple-light);
 
-    letter-spacing: 5px;
+    letter-spacing: 4px;
 
     margin-bottom: 25px;
 }
 
-.hero-title h1 {
-    font-size: clamp(100px, 18vw, 290px);
+.hero-title {
+    font-size: clamp(110px, 20vw, 310px);
 
     font-weight: 900;
 
-    line-height: .66;
+    line-height: .6;
 
-    letter-spacing: -10px;
+    letter-spacing: -12px;
 
     text-transform: uppercase;
-
-    text-shadow:
-        0 0 40px rgba(141,53,255,.15);
 }
 
-.hero-title h1 span {
+.hero-title span {
     display: block;
 
     color: transparent;
 
     -webkit-text-stroke:
-        1px rgba(214,153,255,.75);
+        1px var(--purple-light);
 
-    transform: translateX(80px);
+    transform: translateX(90px);
 }
 
-.hero-title .sub {
-    margin-top: 45px;
+.hero-description {
+    margin-top: 65px;
+
+    width: 410px;
+
+    border-left: 2px solid var(--purple);
+
+    padding-left: 15px;
 
     font-family: "Space Mono";
 
     font-size: 9px;
 
-    color: var(--grey);
-
     line-height: 2;
 
-    max-width: 420px;
-
-    border-left: 2px solid var(--purple);
-
-    padding-left: 15px;
+    color: var(--grey);
 }
 
 
 /* =========================================================
-   CORE / HEX RADAR
-   ========================================================= */
+   CENTRAL HEX CORE
+========================================================= */
 
-.core-system {
+.hero-core {
     position: absolute;
 
-    right: 9vw;
-    top: 120px;
+    right: 11vw;
+    top: 25%;
 
-    width: 430px;
-    height: 430px;
+    width: 380px;
+    height: 440px;
 
-    z-index: 3;
+    z-index: 8;
+
+    display: grid;
+
+    place-items: center;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(139,53,255,.08),
+            transparent
+        );
+
+    clip-path: polygon(
+        25% 0,
+        75% 0,
+        100% 50%,
+        75% 100%,
+        25% 100%,
+        0 50%
+    );
 }
 
-.core-ring {
-    position: absolute;
-
-    inset: 0;
-
-    border: 1px solid var(--purple);
-
-    border-radius: 50%;
-
-    animation:
-        spin 18s linear infinite;
-}
-
-.core-ring::before,
-.core-ring::after {
+.hero-core::before {
     content: "";
 
     position: absolute;
 
-    inset: 35px;
-
-    border: 1px dashed var(--line);
-
-    border-radius: 50%;
-}
-
-.core-ring::after {
-    inset: 90px;
-
-    border: 1px solid var(--violet);
-}
-
-.core-ring.two {
-    inset: 45px;
-
-    animation-direction: reverse;
-    animation-duration: 12s;
-}
-
-.core-ring.three {
-    inset: 105px;
-
-    animation-duration: 8s;
-}
-
-.core-cross {
-    position: absolute;
-
-    left: 50%;
-    top: 0;
-    bottom: 0;
-
-    width: 1px;
+    inset: 15px;
 
     background:
-        linear-gradient(
-            transparent,
-            var(--purple),
-            transparent
+        repeating-linear-gradient(
+            60deg,
+            transparent 0,
+            transparent 20px,
+            rgba(139,53,255,.08) 21px,
+            transparent 22px
         );
+
+    clip-path: inherit;
 }
 
-.core-cross.horizontal {
-    top: 50%;
-    left: 0;
-    right: 0;
-
-    width: auto;
-    height: 1px;
-}
-
-.core {
-    position: absolute;
-
-    width: 115px;
-    height: 115px;
-
-    left: 50%;
-    top: 50%;
-
-    transform:
-        translate(-50%, -50%)
-        rotate(30deg);
+.core-inner {
+    width: 175px;
+    height: 202px;
 
     background:
         radial-gradient(
             circle,
-            var(--violet),
-            var(--purple) 35%,
-            #351067 65%,
+            var(--purple-light),
+            var(--purple) 28%,
+            var(--purple-dark) 55%,
             transparent 70%
         );
 
@@ -573,101 +593,45 @@ main {
     );
 
     filter:
-        drop-shadow(0 0 25px var(--purple));
+        drop-shadow(0 0 35px var(--purple));
 
-    animation: pulse 2.5s infinite;
+    animation:
+        corePulse 2.8s infinite;
 }
 
-.core-label {
+.core-data {
     position: absolute;
 
-    right: 0;
-    bottom: 30px;
+    right: 20px;
+    bottom: 40px;
 
     font-family: "Space Mono";
 
     font-size: 7px;
-
-    line-height: 2;
 
     color: var(--grey);
 
     text-align: right;
+
+    line-height: 1.8;
 }
 
-.core-label strong {
-    color: var(--violet);
-}
-
-
-/* =========================================================
-   FLOATING DATA
-   ========================================================= */
-
-.data-box {
-    position: absolute;
-
-    z-index: 10;
-
-    border: 1px solid var(--line);
-
-    background: rgba(5,3,8,.8);
-
-    padding: 13px;
-
-    font-family: "Space Mono";
-
-    font-size: 7px;
-
-    line-height: 1.9;
-
-    color: var(--grey);
-}
-
-.data-box b {
-    color: var(--violet);
-}
-
-.data-a {
-    left: 8vw;
-    bottom: 90px;
-}
-
-.data-b {
-    right: 5vw;
-    bottom: 80px;
-
-    border-color: rgba(255,48,79,.4);
-}
-
-.data-b b {
-    color: var(--red);
+.core-data strong {
+    color: var(--purple-light);
 }
 
 
 /* =========================================================
-   HEX FIELD
-   ========================================================= */
+   HERO HEX NODES
+========================================================= */
 
-.hex-field {
+.hero-node {
     position: absolute;
 
-    right: 4%;
-    bottom: 60px;
+    width: 100px;
+    height: 115px;
 
-    display: grid;
-
-    grid-template-columns:
-        repeat(5, 45px);
-
-    gap: 3px;
-
-    opacity: .6;
-}
-
-.hex-field div {
-    width: 45px;
-    height: 52px;
+    background: rgba(139,53,255,.08);
 
     border: 1px solid var(--line);
 
@@ -679,69 +643,87 @@ main {
         25% 100%,
         0 50%
     );
+
+    display: grid;
+
+    place-items: center;
+
+    font-family: "Space Mono";
+
+    font-size: 6px;
+
+    color: var(--grey);
+
+    text-align: center;
+}
+
+.hero-node b {
+    display: block;
+
+    color: var(--purple-light);
+
+    font-size: 8px;
+}
+
+.hero-node.one {
+    left: 9%;
+    bottom: 15%;
+}
+
+.hero-node.two {
+    left: 20%;
+    bottom: 8%;
+}
+
+.hero-node.three {
+    right: 32%;
+    bottom: 9%;
 }
 
 
 /* =========================================================
-   SECTION BASE
-   ========================================================= */
+   SECTION
+========================================================= */
 
 .section {
     position: relative;
 
-    padding: 130px 7vw;
+    padding:
+        150px
+        7vw;
 
     border-bottom: 1px solid var(--line);
 
     overflow: hidden;
 }
 
-.section-number {
-    position: absolute;
-
-    right: 4vw;
-    top: 40px;
-
+.section-code {
     font-family: "Space Mono";
 
     font-size: 8px;
 
-    color: var(--grey);
+    color: var(--purple-light);
 
-    writing-mode: vertical-rl;
+    letter-spacing: 4px;
 
-    letter-spacing: 3px;
+    margin-bottom: 25px;
 }
 
-.section-heading {
-    position: relative;
-
-    margin-bottom: 70px;
-}
-
-.section-heading .code {
-    font-family: "Space Mono";
-
-    color: var(--violet);
-
-    font-size: 8px;
-
-    letter-spacing: 3px;
-}
-
-.section-heading h2 {
-    font-size: clamp(90px, 15vw, 220px);
-
-    line-height: .65;
-
-    text-transform: uppercase;
+.section-title {
+    font-size: clamp(100px, 16vw, 240px);
 
     font-weight: 900;
 
-    letter-spacing: -8px;
+    line-height: .55;
+
+    letter-spacing: -10px;
+
+    text-transform: uppercase;
+
+    margin-bottom: 100px;
 }
 
-.section-heading h2 span {
+.section-title span {
     color: transparent;
 
     -webkit-text-stroke:
@@ -750,182 +732,188 @@ main {
 
 
 /* =========================================================
-   PROJECTS
-   ========================================================= */
+   PROJECT HEX SYSTEM
+========================================================= */
 
-.project-zone {
+.project-system {
     position: relative;
 
-    min-height: 1200px;
+    min-height: 1250px;
+
+    width: 100%;
 }
 
 
-/* PROJECT NODE */
+/* CENTRAL CORE */
 
-.project-node {
+.project-core {
     position: absolute;
 
-    width: 390px;
+    left: 50%;
+    top: 45%;
 
-    min-height: 310px;
+    transform:
+        translate(-50%, -50%);
+
+    width: 310px;
+    height: 358px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(139,53,255,.35),
+            rgba(139,53,255,.05) 55%,
+            transparent 70%
+        );
+
+    clip-path: polygon(
+        25% 0,
+        75% 0,
+        100% 50%,
+        75% 100%,
+        25% 100%,
+        0 50%
+    );
 
     border: 1px solid var(--line);
+}
+
+.project-core::after {
+    content: "PROJECT CORE";
+
+    position: absolute;
+
+    inset: 0;
+
+    display: grid;
+
+    place-items: center;
+
+    font-family: "Space Mono";
+
+    font-size: 8px;
+
+    letter-spacing: 3px;
+
+    color: var(--purple-light);
+}
+
+
+/* =========================================================
+   PROJECT HEX
+========================================================= */
+
+.project {
+    position: absolute;
+
+    width: 420px;
+    height: 485px;
+
+    padding: 50px 48px;
 
     background:
         linear-gradient(
             145deg,
-            rgba(141,53,255,.11),
-            rgba(5,3,8,.96) 55%
+            rgba(18,8,25,.98),
+            rgba(6,3,9,.98)
         );
 
-    padding: 28px;
+    clip-path: polygon(
+        25% 0,
+        75% 0,
+        100% 50%,
+        75% 100%,
+        25% 100%,
+        0 50%
+    );
 
-    transition: .35s;
-
-    overflow: hidden;
+    transition:
+        transform .4s,
+        filter .4s;
 }
 
-.project-node:hover {
-    transform:
-        translateY(-8px)
-        scale(1.015);
-
-    border-color: var(--violet);
-
-    box-shadow:
-        0 0 50px rgba(141,53,255,.16);
-}
-
-.project-node::before {
+.project::before {
     content: "";
 
     position: absolute;
 
-    width: 100px;
-    height: 100px;
-
-    right: -40px;
-    top: -40px;
-
-    border: 1px solid var(--purple);
-
-    transform: rotate(45deg);
-}
-
-.project-node::after {
-    content: "";
-
-    position: absolute;
-
-    height: 1px;
-
-    left: 0;
-    right: 0;
-
-    top: 52px;
-
-    background: var(--line);
-}
-
-
-/* POSITIONS */
-
-.node-one {
-    left: 0;
-    top: 0;
-
-    width: 530px;
-
-    min-height: 500px;
-}
-
-.node-two {
-    right: 4%;
-    top: 110px;
-}
-
-.node-three {
-    left: 20%;
-    top: 610px;
-
-    width: 360px;
-}
-
-.node-four {
-    right: 0;
-    top: 650px;
-
-    width: 440px;
-}
-
-
-/* PROJECT IMAGE */
-
-.node-image {
-    height: 180px;
-
-    margin: -10px -10px 25px;
-
-    position: relative;
-
-    overflow: hidden;
+    inset: 5px;
 
     background:
-        repeating-linear-gradient(
-            45deg,
-            rgba(141,53,255,.08),
-            rgba(141,53,255,.08) 2px,
-            transparent 2px,
-            transparent 10px
+        linear-gradient(
+            145deg,
+            rgba(139,53,255,.08),
+            transparent 60%
+        );
+
+    clip-path: inherit;
+
+    z-index: -1;
+}
+
+.project:hover {
+    transform:
+        scale(1.045)
+        rotate(-1deg);
+
+    filter:
+        drop-shadow(
+            0 0 25px
+            rgba(139,53,255,.35)
         );
 }
 
-.node-image img {
-    width: 100%;
-    height: 100%;
 
-    object-fit: cover;
+/* PROJECT POSITIONS */
 
-    opacity: .65;
-
-    mix-blend-mode: screen;
-
-    transition: .4s;
+.project-1 {
+    left: 0;
+    top: 0;
 }
 
-.project-node:hover .node-image img {
-    opacity: 1;
-    transform: scale(1.04);
+.project-2 {
+    right: 2%;
+    top: 150px;
+}
+
+.project-3 {
+    left: 15%;
+    top: 630px;
+}
+
+.project-4 {
+    right: 9%;
+    top: 730px;
 }
 
 
-/* NODE INFO */
+/* PROJECT CONTENT */
 
-.node-code {
+.project-number {
     font-family: "Space Mono";
 
-    color: var(--violet);
+    color: var(--purple-light);
 
     font-size: 7px;
 
     letter-spacing: 2px;
 
-    margin-bottom: 20px;
+    margin-bottom: 45px;
 }
 
-.node-title {
-    font-size: 52px;
+.project h3 {
+    font-size: 62px;
 
     text-transform: uppercase;
 
-    line-height: .75;
+    line-height: .72;
 
-    font-weight: 800;
+    font-weight: 900;
 
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
-.node-text {
+.project p {
     font-family: "Space Mono";
 
     font-size: 8px;
@@ -934,45 +922,79 @@ main {
 
     color: var(--grey);
 
-    max-width: 400px;
-
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
-.node-tags {
+.project-image {
+    width: 190px;
+    height: 120px;
+
+    margin-bottom: 22px;
+
+    overflow: hidden;
+
+    clip-path: polygon(
+        25% 0,
+        75% 0,
+        100% 50%,
+        75% 100%,
+        25% 100%,
+        0 50%
+    );
+
+    border: 1px solid var(--line);
+}
+
+.project-image img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    opacity: .7;
+}
+
+.project-tags {
     display: flex;
 
     flex-wrap: wrap;
 
-    gap: 4px;
+    gap: 5px;
 
     margin-bottom: 20px;
 }
 
-.node-tags span {
-    border: 1px solid var(--line);
-
-    padding: 5px 7px;
-
-    color: var(--violet);
-
+.project-tags span {
     font-family: "Space Mono";
 
     font-size: 6px;
+
+    color: var(--purple-light);
+
+    border: 1px solid var(--line);
+
+    padding: 5px 8px;
+
+    clip-path: polygon(
+        15% 0,
+        85% 0,
+        100% 50%,
+        85% 100%,
+        15% 100%,
+        0 50%
+    );
 }
 
-.node-links {
+.project-links {
     display: flex;
 
     gap: 20px;
 }
 
-.node-links a {
+.project-links a {
     font-family: "Space Mono";
 
     font-size: 7px;
-
-    color: white;
 
     border-bottom: 1px solid var(--purple);
 
@@ -981,19 +1003,22 @@ main {
 
 
 /* =========================================================
-   CENTRAL PROJECT MARKER
-   ========================================================= */
+   MINI HEX DATA CLOUD
+========================================================= */
 
-.project-marker {
+.data-cloud {
     position: absolute;
 
-    left: 55%;
-    top: 360px;
+    display: flex;
 
-    transform: translateX(-50%);
+    gap: 5px;
 
-    width: 240px;
-    height: 240px;
+    opacity: .7;
+}
+
+.data-cloud span {
+    width: 38px;
+    height: 44px;
 
     border: 1px solid var(--line);
 
@@ -1005,171 +1030,163 @@ main {
         25% 100%,
         0 50%
     );
-
-    display: grid;
-
-    place-items: center;
-
-    color: var(--purple);
-
-    font-family: "Space Mono";
-
-    font-size: 8px;
-
-    letter-spacing: 2px;
-
-    animation: float 5s ease-in-out infinite;
 }
 
-.project-marker::before {
-    content: "";
-
-    position: absolute;
-
-    inset: 25px;
-
-    border: 1px dashed var(--line);
-
-    clip-path: inherit;
+.cloud-one {
+    right: 5%;
+    top: 20px;
 }
 
-.project-marker strong {
-    font-size: 35px;
-
-    color: var(--violet);
+.cloud-two {
+    left: 3%;
+    bottom: 60px;
 }
 
 
 /* =========================================================
    ABOUT
-   ========================================================= */
+========================================================= */
 
-.about-zone {
+.about-system {
     min-height: 900px;
+
+    position: relative;
 
     display: grid;
 
     grid-template-columns: 1fr 1fr;
 
     gap: 80px;
-
-    position: relative;
 }
 
-.about-copy {
+
+/* ABOUT TEXT */
+
+.about-text {
     padding-top: 30px;
 }
 
-.about-copy h3 {
-    font-size: clamp(70px, 10vw, 140px);
+.about-text h3 {
+    font-size: clamp(90px, 13vw, 190px);
 
-    line-height: .65;
-
-    text-transform: uppercase;
+    line-height: .55;
 
     font-weight: 900;
 
-    margin-bottom: 60px;
+    text-transform: uppercase;
+
+    letter-spacing: -8px;
+
+    margin-bottom: 70px;
 }
 
-.about-copy h3 span {
+.about-text h3 span {
     color: transparent;
 
     -webkit-text-stroke:
-        1px var(--violet);
+        1px var(--purple-light);
 }
 
-.about-copy p {
-    font-family: "Space Mono";
+.about-text p {
+    max-width: 470px;
 
-    color: var(--grey);
+    font-family: "Space Mono";
 
     font-size: 9px;
 
-    line-height: 2.2;
+    color: var(--grey);
 
-    max-width: 480px;
+    line-height: 2.1;
 
     margin-bottom: 20px;
-}
+}er kutter filer / 3D fil
 
 
 /* PERSONNEL HEX */
 
-.personnel {
-    position: relative;
-
+.personnel-core {
     display: grid;
 
     place-items: center;
-
-    min-height: 600px;
 }
 
 .personnel-hex {
-    width: 410px;
-    height: 470px;
+    width: 430px;
+    height: 495px;
+
+    position: relative;
 
     background:
         linear-gradient(
             135deg,
-            rgba(141,53,255,.2),
-            transparent
+            rgba(139,53,255,.18),
+            rgba(5,2,8,.9)
         );
 
-    border: 1px solid var(--line);
-
     clip-path: polygon(
-        20% 0,
-        80% 0,
-        100% 15%,
-        100% 85%,
-        80% 100%,
-        20% 100%,
-        0 85%,
-        0 15%
+        25% 0,
+        75% 0,
+        100% 50%,
+        75% 100%,
+        25% 100%,
+        0 50%
     );
 
-    position: relative;
+    filter:
+        drop-shadow(
+            0 0 20px
+            rgba(139,53,255,.12)
+        );
 }
 
 .personnel-hex::before {
-    content: "T0";
+    content: "";
 
     position: absolute;
 
-    left: 50%;
-    top: 50%;
+    inset: 18px;
 
-    transform: translate(-50%, -50%);
+    border: 1px solid var(--line);
 
-    font-size: 220px;
-
-    font-weight: 900;
-
-    color: rgba(141,53,255,.12);
-}
-
-.personnel-label {
-    position: absolute;
-
-    left: 25px;
-    top: 25px;
-
-    font-family: "Space Mono";
-
-    font-size: 7px;
-
-    color: var(--violet);
-
-    letter-spacing: 2px;
+    clip-path: inherit;
 }
 
 .personnel-id {
     position: absolute;
 
-    right: 25px;
-    bottom: 25px;
+    top: 55px;
+    left: 60px;
+
+    font-family: "Space Mono";
+
+    font-size: 7px;
+
+    color: var(--purple-light);
+
+    line-height: 2;
+}
+
+.personnel-name {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform:
+        translate(-50%, -50%);
+
+    font-size: 140px;
+
+    font-weight: 900;
+
+    color: rgba(139,53,255,.12);
+}
+
+.personnel-status {
+    position: absolute;
+
+    bottom: 55px;
+    right: 60px;
 
     font-family: "Space Mono";
 
@@ -1178,172 +1195,176 @@ main {
     color: var(--grey);
 
     text-align: right;
+
+    line-height: 2;
+}
+
+.personnel-status strong {
+    color: var(--purple-light);
 }
 
 
 /* =========================================================
-   TECHNOLOGY MATRIX
-   ========================================================= */
+   TECHNOLOGY HEX ROW
+========================================================= */
 
-.tech-matrix {
-    position: absolute;
+.technology {
+    margin-top: 120px;
 
-    left: 0;
-    right: 0;
-    bottom: 0;
+    display: flex;
 
-    display: grid;
+    justify-content: center;
 
-    grid-template-columns:
-        repeat(9, 1fr);
+    flex-wrap: wrap;
 
-    border-top: 1px solid var(--line);
+    max-width: 900px;
+
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .tech {
-    height: 90px;
+    width: 130px;
+    height: 150px;
 
-    border-right: 1px solid var(--line);
+    margin: -8px;
+
+    background:
+        rgba(139,53,255,.055);
+
+    clip-path: polygon(
+        25% 0,
+        75% 0,
+        100% 50%,
+        75% 100%,
+        25% 100%,
+        0 50%
+    );
 
     display: flex;
 
     flex-direction: column;
 
-    justify-content: space-between;
+    justify-content: center;
 
-    padding: 12px;
+    align-items: center;
 
-    background:
-        linear-gradient(
-            135deg,
-            rgba(141,53,255,.04),
-            transparent
-        );
+    border: 1px solid var(--line);
 
-    transition: .2s;
+    transition: .25s;
 }
 
 .tech:hover {
-    background: rgba(141,53,255,.15);
+    background:
+        rgba(139,53,255,.2);
 
-    color: var(--violet);
+    transform:
+        scale(1.08);
+
+    z-index: 10;
 }
 
 .tech small {
     font-family: "Space Mono";
 
+    color: var(--dark);
+
     font-size: 6px;
 
-    color: var(--dim);
+    margin-bottom: 15px;
 }
 
 .tech strong {
     font-family: "Space Mono";
 
-    font-size: 7px;
+    font-size: 8px;
+
+    color: var(--purple-light);
 }
 
 
 /* =========================================================
-   CONTACT
-   ========================================================= */
+   CONTACT HEX
+========================================================= */
 
 .contact {
-    min-height: 850px;
+    min-height: 100vh;
 
     position: relative;
 
-    display: flex;
+    display: grid;
 
-    align-items: center;
+    place-items: center;
+
+    overflow: hidden;
 }
 
-.contact-ring {
-    position: absolute;
-
-    right: 5%;
-    top: 50%;
-
-    transform: translateY(-50%);
-
-    width: 550px;
-    height: 550px;
-
-    border: 1px solid var(--line);
-
-    border-radius: 50%;
-}
-
-.contact-ring::before {
-    content: "";
+.contact-hex {
+    width: 850px;
+    height: 980px;
 
     position: absolute;
 
-    inset: 70px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(139,53,255,.11),
+            transparent 65%
+        );
 
-    border: 1px dashed var(--purple);
-
-    border-radius: 50%;
+    clip-path: polygon(
+        25% 0,
+        75% 0,
+        100% 50%,
+        75% 100%,
+        25% 100%,
+        0 50%
+    );
 }
 
-.contact-ring::after {
-    content: "";
-
-    position: absolute;
-
-    inset: 170px;
-
-    border: 1px solid var(--violet);
-
-    border-radius: 50%;
-
-    box-shadow:
-        0 0 60px rgba(141,53,255,.2);
-}
-
-.contact-content {
+.contact-inner {
     position: relative;
 
-    z-index: 4;
+    z-index: 5;
+
+    text-align: center;
 }
 
-.contact-content .code {
+.contact-code {
     font-family: "Space Mono";
+
+    color: var(--danger);
 
     font-size: 8px;
 
-    color: var(--red);
+    letter-spacing: 4px;
 
-    letter-spacing: 3px;
-
-    margin-bottom: 25px;
+    margin-bottom: 35px;
 }
 
-.contact-content h2 {
-    font-size: clamp(100px, 17vw, 250px);
+.contact h2 {
+    font-size: clamp(110px, 18vw, 280px);
+
+    line-height: .55;
 
     font-weight: 900;
 
-    line-height: .62;
+    letter-spacing: -12px;
 
     text-transform: uppercase;
-
-    letter-spacing: -10px;
 }
 
-.contact-content h2 span {
-    color: var(--violet);
+.contact h2 span {er kutter filer / 3D fil
+    color: transparent;
 
-    text-shadow:
-        0 0 35px rgba(141,53,255,.3);
+    -webkit-text-stroke:
+        1px var(--purple-light);
 }
 
-.contact-content p {
-    max-width: 430px;
+.contact-text {
+    max-width: 450px;
 
-    margin-top: 55px;
-
-    margin-bottom: 30px;
+    margin: 60px auto 30px;
 
     font-family: "Space Mono";
 
@@ -1354,60 +1375,56 @@ main {
     line-height: 2;
 }
 
-.transmission {
+.contact-button {
     display: inline-flex;
 
-    align-items: center;
-
-    gap: 15px;
-
-    padding: 14px 20px;
+    padding: 15px 28px;
 
     border: 1px solid var(--purple);
+
+    background:
+        rgba(139,53,255,.08);
 
     font-family: "Space Mono";
 
     font-size: 8px;
 
-    color: var(--white);
-
-    background: rgba(141,53,255,.08);
+    letter-spacing: 2px;
 
     transition: .2s;
 }
 
-.transmission:hover {
+.contact-button:hover {
     background: var(--purple);
 
     box-shadow:
-        0 0 30px rgba(141,53,255,.4);
+        0 0 35px
+        rgba(139,53,255,.4);
 }
 
 
 /* =========================================================
    FOOTER
-   ========================================================= */
+========================================================= */
 
 footer {
+    border-top: 1px solid var(--line);
+
     min-height: 100px;
 
-    padding: 25px 7vw;
-
-    border-top: 1px solid var(--line);
+    padding: 30px 7vw;
 
     display: flex;
 
-    align-items: center;
-
     justify-content: space-between;
+
+    align-items: center;
 
     font-family: "Space Mono";
 
     font-size: 7px;
 
     color: var(--grey);
-
-    letter-spacing: 1px;
 }
 
 .socials {
@@ -1417,121 +1434,36 @@ footer {
 }
 
 .socials a:hover {
-    color: var(--violet);
+    color: var(--purple-light);
 }
 
 
 /* =========================================================
-   ANIMATIONS
-   ========================================================= */
+   ANIMATION
+========================================================= */
 
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
+@keyframes corePulse {
 
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-@keyframes pulse {
-    0%,100% {
+    0%,
+    100% {
+        transform: scale(.94);
         opacity: .75;
-        transform:
-            translate(-50%, -50%)
-            rotate(30deg)
-            scale(.95);
     }
 
     50% {
+        transform: scale(1.06);
         opacity: 1;
-        transform:
-            translate(-50%, -50%)
-            rotate(30deg)
-            scale(1.08);
-    }
-}
-
-@keyframes float {
-    0%,100% {
-        transform:
-            translateX(-50%)
-            translateY(0);
-    }
-
-    50% {
-        transform:
-            translateX(-50%)
-            translateY(-15px);
     }
 }
 
 
 /* =========================================================
-   RESPONSIVE
-   ========================================================= */
+   MOBILE
+========================================================= */
 
 @media(max-width: 1000px) {
 
-    .core-system {
-        right: -100px;
-        opacity: .55;
-    }
-
-    .hero-title {
-        left: 8vw;
-    }
-
-    .project-zone {
-        min-height: auto;
-
-        display: flex;
-        flex-direction: column;
-
-        gap: 25px;
-    }
-
-    .project-node,
-    .node-one,
-    .node-two,
-    .node-three,
-    .node-four {
-        position: relative;
-
-        inset: auto;
-
-        width: 100%;
-
-        min-height: 350px;
-    }
-
-    .project-marker {
-        display: none;
-    }
-
-    .about-zone {
-        grid-template-columns: 1fr;
-    }
-
-    .tech-matrix {
-        position: relative;
-
-        grid-template-columns:
-            repeat(3, 1fr);
-
-        margin-top: 80px;
-    }
-
-    .contact-ring {
-        opacity: .25;
-    }
-}
-
-
-@media(max-width: 650px) {
-
-    .system-rail {
+    .spine {
         display: none;
     }
 
@@ -1539,76 +1471,151 @@ footer {
         margin-left: 0;
     }
 
-    .top-strip {
-        padding: 0 12px;
+    .hero-core {
+        right: -80px;
+        opacity: .55;
+    }
+
+    .project-system {
+        min-height: auto;
+
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: center;
+
+        gap: 25px;
+    }
+
+    .project,
+    .project-1,
+    .project-2,
+    .project-3,
+    .project-4 {
+        position: relative;
+
+        left: auto;
+        right: auto;
+        top: auto;
+
+        width: min(420px, 95vw);
+
+        flex-shrink: 0;
+    }
+
+    .project-core {
+        display: none;
+    }
+
+    .data-cloud {
+        display: none;
+    }
+
+    .about-system {
+        grid-template-columns: 1fr;
+    }
+
+    .technology {
+        margin-top: 50px;
+    }
+}
+
+
+@media(max-width: 600px) {
+
+    .topbar span:last-child {
+        display: none;
     }
 
     .hero {
-        min-height: 800px;
+        min-height: 850px;
+    }
+
+    .hero-content {
+        padding:
+            100px
+            25px
+            50px;
     }
 
     .hero-title {
-        top: 120px;
-        left: 25px;
-    }
-
-    .hero-title h1 {
-        font-size: 90px;
+        font-size: 95px;er kutter filer / 3D fil
 
         letter-spacing: -5px;
     }
 
-    .hero-title h1 span {
+    .hero-title span {
         transform: translateX(25px);
     }
 
-    .core-system {
-        width: 300px;
-        height: 300px;
+    .hero-description {
+        width: 280px;
 
-        right: -80px;
-        top: 390px;
+        margin-top: 45px;
+    }
+
+    .hero-core {
+        width: 280px;
+        height: 323px;
+
+        right: -70px;
+        top: 470px;
+    }
+
+    .core-inner {
+        width: 115px;
+        height: 132px;
     }
 
     .section {
-        padding: 90px 25px;
+        padding:
+            100px
+            20px;
     }
 
-    .section-heading h2 {
-        font-size: 80px;
+    .section-title {
+        font-size: 85px;
 
-        letter-spacing: -4px;
+        letter-spacing: -5px;
+
+        margin-bottom: 60px;
     }
 
-    .node-title {
-        font-size: 42px;
+    .project {
+        width: 350px;
+        height: 404px;
+
+        padding: 45px 40px;
+    }
+
+    .project h3 {
+        font-size: 48px;
+    }
+
+    .project-image {
+        width: 150px;
+        height: 90px;
     }
 
     .personnel-hex {
-        width: 300px;
+        width: 320px;
         height: 370px;
     }
 
-    .tech-matrix {
-        grid-template-columns:
-            repeat(2, 1fr);
+    .personnel-name {
+        font-size: 105px;
     }
 
-    .contact {
-        min-height: 700px;
+    .tech {
+        width: 105px;
+        height: 120px;
     }
 
-    .contact-content h2 {
+    .contact h2 {
         font-size: 90px;
 
-        letter-spacing: -5px;
-    }
-
-    .contact-ring {
-        width: 400px;
-        height: 400px;
-
-        right: -200px;
+        letter-spacing: -6px;
     }
 
     footer {
@@ -1623,23 +1630,49 @@ footer {
 </style>
 </head>
 
-
+er kutter filer / 3D fil
 <body>
 
 
 <!-- =========================================================
-     SYSTEM RAIL
-     ========================================================= -->
+     BACKGROUND HEX FIELD
+========================================================= -->
 
-<aside class="system-rail">
+<div class="hex-background">
 
-    <div class="rail-mark">
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+
+</div>
+
+
+<!-- =========================================================
+     COMMAND SPINE
+========================================================= -->
+
+<aside class="spine">
+
+    <div class="spine-logo">
         T0
     </div>
 
-    <div class="rail-line"></div>
+    <div class="spine-line"></div>
 
-    <nav class="rail-links">
+    <nav class="spine-nav">
 
         <a href="#">
             SYSTEM
@@ -1654,13 +1687,13 @@ footer {
         </a>
 
         <a href="#contact">
-            CONTACT
+            CHANNEL
         </a>
 
     </nav>
 
-    <div class="rail-bottom">
-        INTERFACE // 01
+    <div class="spine-bottom">
+        HEX SYSTEM // ACTIVE
     </div>
 
 </aside>
@@ -1670,21 +1703,21 @@ footer {
 
 
 <!-- =========================================================
-     TOP STRIP
-     ========================================================= -->
+     TOP BAR
+========================================================= -->
 
-<div class="top-strip">
+<div class="topbar">
 
-    <span class="signal">
+    <span class="online">
         SYSTEM ONLINE
     </span>
 
     <span>
-        T0KAKU // CREATIVE INTERFACE
+        T0KAKU // HEX INTERFACE
     </span>
 
     <span>
-        2026 // 01:00:00
+        BUILD <strong>2026.01</strong>
     </span>
 
 </div>
@@ -1692,108 +1725,80 @@ footer {
 
 <!-- =========================================================
      HERO
-     ========================================================= -->
+========================================================= -->
 
 <section class="hero">
 
-    <div class="hero-number">
-        01
-    </div>
+    <div class="hero-hex"></div>
 
-    <div class="hero-diagonal"></div>
+    <div class="hero-content">
 
-
-    <div class="hero-title">
-
-        <div class="small">
-            PERSONNEL IDENTIFICATION // T0KAKU
+        <div class="kicker">
+            CREATIVE PERSONNEL // IDENTIFICATION 001
         </div>
 
-        <h1>
+        <h1 class="hero-title">
             T0
             <span>KAKU</span>
         </h1>
 
-        <div class="sub">
-            CREATIVE DEVELOPER / DIGITAL CREATOR<br>
-            SYSTEM STATUS: OPERATIONAL<br>
-            ACCESS LEVEL: PUBLIC
-        </div>
+        <p class="hero-description">
+
+            I'm a developer and creator focused on building
+            clean, useful and thoughtful digital experiences.
+
+            <br><br>
+
+            SYSTEM NOTE //
+            THIS INTERFACE WAS NOT DESIGNED
+            FOR NORMAL EXPECTATIONS.
+
+        </p>
 
     </div>
 
 
     <!-- CORE -->
 
-    <div class="core-system">
+    <div class="hero-core">
 
-        <div class="core-ring"></div>
-        <div class="core-ring two"></div>
-        <div class="core-ring three"></div>
+        <div class="core-inner"></div>
 
-        <div class="core-cross"></div>
-        <div class="core-cross horizontal"></div>
+        <div class="core-data">
 
-        <div class="core"></div>
+            CORE SIGNAL<br>
+            <strong>100.00%</strong>
 
-        <div class="core-label">
+            <br>
+
             SYNCHRONIZATION<br>
-            <strong>100.00%</strong><br>
-            CORE STATUS // STABLE
+            <strong>STABLE</strong>
+
         </div>
 
     </div>
 
 
-    <!-- DATA -->
+    <!-- SMALL HEX DATA -->
 
-    <div class="data-box data-a">
+    <div class="hero-node one">
 
-        DESIGN CAPACITY:
-        <b>HIGH</b><br>
-
-        CODE INTEGRITY:
-        <b>STABLE</b><br>
-
-        CREATIVE OUTPUT:
+        NODE 01<br>
         <b>ACTIVE</b>
 
     </div>
 
+    <div class="hero-node two">
 
-    <div class="data-box data-b">
-
-        WARNING // VISUAL SYSTEM<br>
-
-        <b>UNCONVENTIONAL INTERFACE</b><br>
-
-        USER EXPECTATION:
-        <b>IGNORED</b>
+        NODE 02<br>
+        <b>ONLINE</b>
 
     </div>
 
+    <div class="hero-node three">
 
-    <!-- HEX FIELD -->
-
-    <div class="hex-field">
-
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
+        NODE 03<br>
+        <b>SYNC</b>
 
     </div>
 
@@ -1803,39 +1808,56 @@ footer {
 
 <!-- =========================================================
      PROJECTS
-     ========================================================= -->
+========================================================= -->
 
 <section
     id="projects"
     class="section"
 >
 
-    <div class="section-number">
-        OPERATION 02 // TARGET ARCHIVE
+    <div class="section-code">
+        TARGET DATABASE // PROJECT ARCHIVE
     </div>
 
+    <h2 class="section-title">
+        PRO<span>JECTS</span>
+    </h2>
 
-    <div class="section-heading">
 
-        <div class="code">
-            TARGET DATABASE // ACCESS GRANTED
+    <div class="project-system">
+
+
+        <!-- CENTRAL HEX -->
+
+        <div class="project-core"></div>
+
+
+        <!-- DATA CLOUD -->
+
+        <div class="data-cloud cloud-one">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
         </div>
 
-        <h2>
-            PRO<span>JECTS</span>
-        </h2>
 
-    </div>
-
-
-    <div class="project-zone">
+        <div class="data-cloud cloud-two">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
 
 
         <!-- PROJECT 01 -->
 
-        <article class="project-node node-one">
+        <article class="project project-1">
 
-            <div class="node-image">
+            <div class="project-number">
+                TARGET // 001
+            </div>
+
+            <div class="project-image">
 
                 <img
                     src="dnd world my/atachment/Pasted image 20250903191839.png"
@@ -1844,29 +1866,28 @@ footer {
 
             </div>
 
-            <div class="node-code">
-                TARGET 01 // ACTIVE
-            </div>
-
-            <h3 class="node-title">
-                Project One
+            <h3>
+                Project<br>
+                One
             </h3>
 
-            <p class="node-text">
+            <p>
                 A short description of what this project does,
                 what problem it solves and why it was built.
             </p>
 
-            <div class="node-tags">
+            <div class="project-tags">
+
                 <span>HTML</span>
                 <span>CSS</span>
                 <span>JAVASCRIPT</span>
+
             </div>
 
-            <div class="node-links">
+            <div class="project-links">
 
                 <a href="#">
-                    LIVE DEMO →
+                    LIVE →
                 </a>
 
                 <a href="#">
@@ -1880,31 +1901,34 @@ footer {
 
         <!-- PROJECT 02 -->
 
-        <article class="project-node node-two">
+        <article class="project project-2">
 
-            <div class="node-code">
-                TARGET 02 // ACTIVE
+            <div class="project-number">
+                TARGET // 002
             </div>
 
-            <h3 class="node-title">
-                Project Two
+            <h3>
+                Project<br>
+                Two
             </h3>
 
-            <p class="node-text">
+            <p>
                 A modern web application built to make
                 a specific workflow faster and easier.
             </p>
 
-            <div class="node-tags">
+            <div class="project-tags">
+
                 <span>REACT</span>
                 <span>TYPESCRIPT</span>
                 <span>API</span>
+
             </div>
 
-            <div class="node-links">
+            <div class="project-links">
 
                 <a href="#">
-                    LIVE DEMO →
+                    LIVE →
                 </a>
 
                 <a href="#">
@@ -1918,30 +1942,33 @@ footer {
 
         <!-- PROJECT 03 -->
 
-        <article class="project-node node-three">
+        <article class="project project-3">
 
-            <div class="node-code">
-                TARGET 03 // EXPERIMENTAL
+            <div class="project-number">
+                TARGET // 003 // EXPERIMENTAL
             </div>
 
-            <h3 class="node-title">
-                Project Three
+            <h3>
+                Project<br>
+                Three
             </h3>
 
-            <p class="node-text">
+            <p>
                 An experimental project exploring new ideas,
                 technologies and interaction patterns.
             </p>
 
-            <div class="node-tags">
+            <div class="project-tags">
+
                 <span>PYTHON</span>
                 <span>AI</span>
+
             </div>
 
-            <div class="node-links">
+            <div class="project-links">
 
                 <a href="#">
-                    VIEW PROJECT →
+                    VIEW →
                 </a>
 
             </div>
@@ -1951,30 +1978,33 @@ footer {
 
         <!-- PROJECT 04 -->
 
-        <article class="project-node node-four">
+        <article class="project project-4">
 
-            <div class="node-code">
-                TARGET 04 // ACTIVE
+            <div class="project-number">
+                TARGET // 004
             </div>
 
-            <h3 class="node-title">
-                Project Four
+            <h3>
+                Project<br>
+                Four
             </h3>
 
-            <p class="node-text">
+            <p>
                 Another project description. Explain the idea,
                 technology and result in a few sentences.
             </p>
 
-            <div class="node-tags">
+            <div class="project-tags">
+
                 <span>NEXT.JS</span>
                 <span>NODE.JS</span>
+
             </div>
 
-            <div class="node-links">
+            <div class="project-links">
 
                 <a href="#">
-                    LIVE DEMO →
+                    LIVE →
                 </a>
 
                 <a href="#">
@@ -1985,19 +2015,6 @@ footer {
 
         </article>
 
-
-        <!-- CENTRAL MARKER -->
-
-        <div class="project-marker">
-
-            <div>
-                TARGET<br>
-                <strong>∞</strong><br>
-                UNDEFINED
-            </div>
-
-        </div>
-
     </div>
 
 </section>
@@ -2006,40 +2023,31 @@ footer {
 
 <!-- =========================================================
      ABOUT
-     ========================================================= -->
+========================================================= -->
 
 <section
     id="about"
     class="section"
 >
 
-    <div class="section-number">
-        PERSONNEL 03 // DATA RECORD
+    <div class="section-code">
+        PERSONNEL DATABASE // T0KAKU
     </div>
 
-
-    <div class="section-heading">
-
-        <div class="code">
-            PERSONNEL DATABASE // T0KAKU
-        </div>
-
-        <h2>
-            AB<span>OUT</span>
-        </h2>
-
-    </div>
+    <h2 class="section-title">
+        AB<span>OUT</span>
+    </h2>
 
 
-    <div class="about-zone">
+    <div class="about-system">
 
 
-        <div class="about-copy">
+        <div class="about-text">
 
             <h3>
-                <span>IDEAS</span><br>
-                INTO<br>
-                THINGS
+                <span>IDEA</span><br>
+                TO<br>
+                FORM
             </h3>
 
             <p>
@@ -2055,75 +2063,89 @@ footer {
         </div>
 
 
-        <div class="personnel">
+        <div class="personnel-core">
 
             <div class="personnel-hex">
 
-                <div class="personnel-label">
+                <div class="personnel-id">
+
                     PERSONNEL FILE<br>
-                    ID // T0KAKU
+                    ----------------<br>
+                    ID // T0KAKU<br>
+                    TYPE // CREATOR
+
                 </div>
 
-                <div class="personnel-id">
-                    CREATIVE DEVELOPER<br>
-                    STATUS // ACTIVE<br>
-                    SYNC // 100%
+                <div class="personnel-name">
+                    T0
+                </div>
+
+                <div class="personnel-status">
+
+                    DESIGN // ACTIVE<br>
+                    CODE // ACTIVE<br>
+                    IDEAS // ACTIVE<br>
+
+                    <strong>
+                        STATUS // ONLINE
+                    </strong>
+
                 </div>
 
             </div>
 
         </div>
 
+    </div>
 
-        <!-- TECHNOLOGY -->
 
-        <div class="tech-matrix">
+    <!-- TECHNOLOGY -->
 
-            <div class="tech">
-                <small>01</small>
-                <strong>HTML</strong>
-            </div>
+    <div class="technology">
 
-            <div class="tech">
-                <small>02</small>
-                <strong>CSS</strong>
-            </div>
+        <div class="tech">
+            <small>001</small>
+            <strong>HTML</strong>
+        </div>
 
-            <div class="tech">
-                <small>03</small>
-                <strong>JAVASCRIPT</strong>
-            </div>
+        <div class="tech">
+            <small>002</small>
+            <strong>CSS</strong>
+        </div>
 
-            <div class="tech">
-                <small>04</small>
-                <strong>TYPESCRIPT</strong>
-            </div>
+        <div class="tech">
+            <small>003</small>
+            <strong>JAVASCRIPT</strong>
+        </div>
 
-            <div class="tech">
-                <small>05</small>
-                <strong>REACT</strong>
-            </div>
+        <div class="tech">
+            <small>004</small>
+            <strong>TYPESCRIPT</strong>
+        </div>
 
-            <div class="tech">
-                <small>06</small>
-                <strong>NEXT.JS</strong>
-            </div>
+        <div class="tech">
+            <small>005</small>
+            <strong>REACT</strong>
+        </div>
 
-            <div class="tech">
-                <small>07</small>
-                <strong>NODE.JS</strong>
-            </div>
+        <div class="tech">
+            <small>006</small>
+            <strong>NEXT.JS</strong>
+        </div>
 
-            <div class="tech">
-                <small>08</small>
-                <strong>PYTHON</strong>
-            </div>
+        <div class="tech">
+            <small>007</small>
+            <strong>NODE.JS</strong>
+        </div>
 
-            <div class="tech">
-                <small>09</small>
-                <strong>GIT</strong>
-            </div>
+        <div class="tech">
+            <small>008</small>
+            <strong>PYTHON</strong>
+        </div>
 
+        <div class="tech">
+            <small>009</small>
+            <strong>GIT</strong>
         </div>
 
     </div>
@@ -2134,25 +2156,19 @@ footer {
 
 <!-- =========================================================
      CONTACT
-     ========================================================= -->
+========================================================= -->
 
 <section
     id="contact"
     class="section contact"
 >
 
-    <div class="section-number">
-        COMMUNICATION 04 // OPEN CHANNEL
-    </div>
+    <div class="contact-hex"></div>
 
+    <div class="contact-inner">
 
-    <div class="contact-ring"></div>
-
-
-    <div class="contact-content">
-
-        <div class="code">
-            ◆ EMERGENCY COMMUNICATION CHANNEL
+        <div class="contact-code">
+            ◆ COMMUNICATION CHANNEL // OPEN
         </div>
 
         <h2>
@@ -2161,7 +2177,7 @@ footer {
             IDEA?
         </h2>
 
-        <p>
+        <p class="contact-text">
             Have an idea, project or opportunity?
             Establish a communication channel and
             initiate transmission.
@@ -2169,10 +2185,9 @@ footer {
 
         <a
             href="mailto:T0kaku@proton.me"
-            class="transmission"
+            class="contact-button"
         >
-            INITIATE TRANSMISSION
-            <strong>→</strong>
+            INITIATE TRANSMISSION →
         </a>
 
     </div>
@@ -2183,12 +2198,12 @@ footer {
 
 <!-- =========================================================
      FOOTER
-     ========================================================= -->
+========================================================= -->
 
 <footer>
 
     <span>
-        T0KAKU // SYSTEM INTERFACE // 2026
+        T0KAKU // HEX SYSTEM // 2026
     </span>
 
     <div class="socials">
@@ -2211,6 +2226,7 @@ footer {
 
 
 </main>
+
 
 </body>
 </html>

@@ -1,2070 +1,2217 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>T0kaku // Interface</title>
+<title>T0kaku // SYSTEM INTERFACE</title>
 
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
+<style>
 
-    /* =========================================================
-       CORE
-    ========================================================= */
+/* =========================================================
+   T0KAKU // VISUAL SYSTEM
+   Original sci-fi / Evangelion-inspired interface
+   ========================================================= */
 
-    :root {
-      --black: #050507;
-      --black2: #0a090d;
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap');
 
-      --purple: #9b4dff;
-      --purple2: #c58cff;
-      --purple3: #6b24c9;
+:root {
+    --void: #050308;
+    --void-2: #09050e;
 
-      --pink: #ff4fd8;
+    --purple: #8d35ff;
+    --violet: #b866ff;
+    --magenta: #e33cff;
 
-      --orange: #ff6b00;
-      --red: #ff304f;
+    --white: #f7efff;
+    --grey: #817688;
+    --dim: #332a38;
 
-      --white: #f4f0f7;
-      --grey: #85808a;
-      --dark-grey: #29252d;
+    --red: #ff304f;
+    --orange: #ff7426;
 
-      --line: rgba(197,140,255,.22);
-    }
+    --grid: rgba(166, 78, 255, .14);
+    --line: rgba(190, 105, 255, .42);
+}
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
 
-    html {
-      scroll-behavior: smooth;
-    }
+/* =========================================================
+   RESET
+   ========================================================= */
 
-    body {
-      background: var(--black);
-      color: var(--white);
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-      font-family:
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--void);
+    color: var(--white);
+
+    font-family:
         "Barlow Condensed",
-        Arial,
+        "Arial Narrow",
         sans-serif;
 
-      overflow-x: hidden;
-    }
+    overflow-x: hidden;
+}
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
+a {
+    color: inherit;
+    text-decoration: none;
+}
 
-    /* =========================================================
-       ATMOSPHERE
-    ========================================================= */
+button,
+a {
+    -webkit-tap-highlight-color: transparent;
+}
 
-    body::before {
-      content: "";
 
-      position: fixed;
-      inset: 0;
+/* =========================================================
+   GLOBAL CRT / SCAN EFFECT
+   ========================================================= */
 
-      pointer-events: none;
+body::before {
+    content: "";
 
-      background:
-        linear-gradient(
-          rgba(255,255,255,.018) 50%,
-          transparent 50%
+    position: fixed;
+    inset: 0;
+
+    pointer-events: none;
+
+    z-index: 9999;
+
+    background:
+        repeating-linear-gradient(
+            to bottom,
+            rgba(255,255,255,.018) 0px,
+            rgba(255,255,255,.018) 1px,
+            transparent 1px,
+            transparent 4px
         );
 
-      background-size: 100% 5px;
+    mix-blend-mode: screen;
 
-      opacity: .35;
+    opacity: .3;
+}
 
-      z-index: 999;
-    }
+body::after {
+    content: "";
 
-    body::after {
-      content: "";
+    position: fixed;
+    inset: 0;
 
-      position: fixed;
-      inset: 0;
+    pointer-events: none;
 
-      pointer-events: none;
+    z-index: -5;
 
-      background-image:
+    background-image:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+
+    background-size: 90px 90px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        black,
+        transparent 85%
+    );
+}
+
+
+/* =========================================================
+   HEXAGON SHAPE
+   ========================================================= */
+
+.hex {
+    clip-path: polygon(
+        25% 0%,
+        75% 0%,
+        100% 50%,
+        75% 100%,
+        25% 100%,
+        0% 50%
+    );
+}
+
+
+/* =========================================================
+   VERTICAL SYSTEM RAIL
+   ========================================================= */
+
+.system-rail {
+    position: fixed;
+
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 68px;
+
+    z-index: 500;
+
+    border-right: 1px solid var(--line);
+
+    background:
         linear-gradient(
-          rgba(155,77,255,.035) 1px,
-          transparent 1px
-        ),
-        linear-gradient(
-          90deg,
-          rgba(155,77,255,.035) 1px,
-          transparent 1px
+            180deg,
+            #09050d,
+            #030205
         );
 
-      background-size: 80px 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-      z-index: -10;
-    }
+    padding: 15px 0;
+}
 
-    /* =========================================================
-       SIDE COMMAND BAR
-    ========================================================= */
+.rail-mark {
+    width: 38px;
+    height: 38px;
 
-    .command-bar {
-      position: fixed;
+    background: var(--purple);
 
-      left: 0;
-      top: 0;
-      bottom: 0;
+    color: #fff;
 
-      width: 92px;
+    display: grid;
+    place-items: center;
 
-      border-right: 1px solid var(--line);
+    font-family: "Space Mono";
+    font-size: 10px;
+    font-weight: 700;
 
-      background:
+    clip-path: polygon(
+        20% 0,
+        80% 0,
+        100% 20%,
+        100% 80%,
+        80% 100%,
+        20% 100%,
+        0 80%,
+        0 20%
+    );
+
+    box-shadow:
+        0 0 25px rgba(141,53,255,.6);
+}
+
+.rail-line {
+    width: 1px;
+    height: 90px;
+
+    background:
         linear-gradient(
-          180deg,
-          #09070b,
-          #050507
+            var(--purple),
+            transparent
         );
 
-      z-index: 100;
+    margin: 20px 0;
+}
 
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+.rail-links {
+    display: flex;
+    flex-direction: column;
 
-      padding: 20px 0;
-    }
+    gap: 4px;
 
-    .command-logo {
-      width: 55px;
-      height: 55px;
+    width: 100%;
+}
 
-      border: 2px solid var(--purple);
+.rail-links a {
+    writing-mode: vertical-rl;
 
-      display: grid;
-      place-items: center;
+    transform: rotate(180deg);
 
-      color: var(--purple2);
+    height: 90px;
 
-      font-family: "Space Mono";
-      font-weight: 700;
-      font-size: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-      position: relative;
+    color: var(--grey);
 
-      margin-bottom: 60px;
-    }
+    font-family: "Space Mono";
+    font-size: 7px;
 
-    .command-logo::before {
-      content: "";
+    letter-spacing: 2px;
 
-      position: absolute;
+    transition: .2s;
+}
 
-      width: 8px;
-      height: 8px;
+.rail-links a:hover {
+    color: var(--violet);
 
-      background: var(--purple);
-
-      top: -4px;
-      right: -4px;
-
-      box-shadow: 0 0 15px var(--purple);
-    }
-
-    .command-logo::after {
-      content: "T0";
-
-      position: absolute;
-
-      bottom: -18px;
-
-      font-size: 7px;
-
-      color: var(--grey);
-    }
-
-    .command-links {
-      display: flex;
-
-      flex-direction: column;
-
-      gap: 8px;
-
-      width: 100%;
-    }
-
-    .command-link {
-      height: 85px;
-
-      display: flex;
-
-      align-items: center;
-      justify-content: center;
-
-      position: relative;
-
-      color: var(--grey);
-
-      writing-mode: vertical-rl;
-
-      font-family: "Space Mono";
-
-      font-size: 9px;
-
-      letter-spacing: 2px;
-
-      transition: .25s;
-    }
-
-    .command-link:hover {
-      color: var(--purple2);
-
-      background:
+    background:
         linear-gradient(
-          90deg,
-          transparent,
-          rgba(155,77,255,.13)
+            90deg,
+            transparent,
+            rgba(141,53,255,.15)
         );
+}
+
+.rail-bottom {
+    margin-top: auto;
+
+    writing-mode: vertical-rl;
+
+    font-family: "Space Mono";
+    font-size: 6px;
+
+    color: var(--dim);
+
+    letter-spacing: 3px;
+}
+
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+main {
+    margin-left: 68px;
+}
+
+
+/* =========================================================
+   TOP DATA STRIP
+   ========================================================= */
+
+.top-strip {
+    height: 32px;
+
+    border-bottom: 1px solid var(--line);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 25px;
+
+    font-family: "Space Mono";
+    font-size: 7px;
+
+    color: var(--grey);
+
+    letter-spacing: 1px;
+}
+
+.top-strip .signal {
+    color: var(--violet);
+}
+
+.signal::before {
+    content: "";
+
+    display: inline-block;
+
+    width: 5px;
+    height: 5px;
+
+    background: var(--purple);
+
+    margin-right: 7px;
+
+    box-shadow:
+        0 0 10px var(--purple);
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.hero {
+    position: relative;
+
+    min-height: 930px;
+
+    overflow: hidden;
+
+    border-bottom: 1px solid var(--line);
+}
+
+
+/* HUGE NUMBER */
+
+.hero-number {
+    position: absolute;
+
+    left: 3vw;
+    top: 40px;
+
+    font-size: clamp(220px, 35vw, 600px);
+
+    font-weight: 900;
+
+    line-height: .7;
+
+    color: rgba(141,53,255,.035);
+
+    letter-spacing: -30px;
+
+    user-select: none;
+}
+
+
+/* DIAGONAL PURPLE FIELD */
+
+.hero-diagonal {
+    position: absolute;
+
+    width: 75%;
+    height: 500px;
+
+    right: -20%;
+    top: 160px;
+
+    background:
+        linear-gradient(
+            135deg,
+            transparent 0%,
+            rgba(141,53,255,.08) 45%,
+            rgba(141,53,255,.22) 100%
+        );
+
+    transform: skewX(-25deg);
+
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+}
+
+
+/* TITLE */
+
+.hero-title {
+    position: absolute;
+
+    left: 8vw;
+    top: 170px;
+
+    z-index: 5;
+}
+
+.hero-title .small {
+    font-family: "Space Mono";
+
+    color: var(--violet);
+
+    font-size: 9px;
+
+    letter-spacing: 5px;
+
+    margin-bottom: 25px;
+}
+
+.hero-title h1 {
+    font-size: clamp(100px, 18vw, 290px);
+
+    font-weight: 900;
+
+    line-height: .66;
+
+    letter-spacing: -10px;
+
+    text-transform: uppercase;
+
+    text-shadow:
+        0 0 40px rgba(141,53,255,.15);
+}
+
+.hero-title h1 span {
+    display: block;
+
+    color: transparent;
+
+    -webkit-text-stroke:
+        1px rgba(214,153,255,.75);
+
+    transform: translateX(80px);
+}
+
+.hero-title .sub {
+    margin-top: 45px;
+
+    font-family: "Space Mono";
+
+    font-size: 9px;
+
+    color: var(--grey);
+
+    line-height: 2;
+
+    max-width: 420px;
+
+    border-left: 2px solid var(--purple);
+
+    padding-left: 15px;
+}
+
+
+/* =========================================================
+   CORE / HEX RADAR
+   ========================================================= */
+
+.core-system {
+    position: absolute;
+
+    right: 9vw;
+    top: 120px;
+
+    width: 430px;
+    height: 430px;
+
+    z-index: 3;
+}
+
+.core-ring {
+    position: absolute;
+
+    inset: 0;
+
+    border: 1px solid var(--purple);
+
+    border-radius: 50%;
+
+    animation:
+        spin 18s linear infinite;
+}
+
+.core-ring::before,
+.core-ring::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 35px;
+
+    border: 1px dashed var(--line);
+
+    border-radius: 50%;
+}
+
+.core-ring::after {
+    inset: 90px;
+
+    border: 1px solid var(--violet);
+}
+
+.core-ring.two {
+    inset: 45px;
+
+    animation-direction: reverse;
+    animation-duration: 12s;
+}
+
+.core-ring.three {
+    inset: 105px;
+
+    animation-duration: 8s;
+}
+
+.core-cross {
+    position: absolute;
+
+    left: 50%;
+    top: 0;
+    bottom: 0;
+
+    width: 1px;
+
+    background:
+        linear-gradient(
+            transparent,
+            var(--purple),
+            transparent
+        );
+}
+
+.core-cross.horizontal {
+    top: 50%;
+    left: 0;
+    right: 0;
+
+    width: auto;
+    height: 1px;
+}
+
+.core {
+    position: absolute;
+
+    width: 115px;
+    height: 115px;
+
+    left: 50%;
+    top: 50%;
+
+    transform:
+        translate(-50%, -50%)
+        rotate(30deg);
+
+    background:
+        radial-gradient(
+            circle,
+            var(--violet),
+            var(--purple) 35%,
+            #351067 65%,
+            transparent 70%
+        );
+
+    clip-path: polygon(
+        25% 0,
+        75% 0,
+        100% 50%,
+        75% 100%,
+        25% 100%,
+        0 50%
+    );
+
+    filter:
+        drop-shadow(0 0 25px var(--purple));
+
+    animation: pulse 2.5s infinite;
+}
+
+.core-label {
+    position: absolute;
+
+    right: 0;
+    bottom: 30px;
+
+    font-family: "Space Mono";
+
+    font-size: 7px;
+
+    line-height: 2;
+
+    color: var(--grey);
+
+    text-align: right;
+}
+
+.core-label strong {
+    color: var(--violet);
+}
+
+
+/* =========================================================
+   FLOATING DATA
+   ========================================================= */
+
+.data-box {
+    position: absolute;
+
+    z-index: 10;
+
+    border: 1px solid var(--line);
+
+    background: rgba(5,3,8,.8);
+
+    padding: 13px;
+
+    font-family: "Space Mono";
+
+    font-size: 7px;
+
+    line-height: 1.9;
+
+    color: var(--grey);
+}
+
+.data-box b {
+    color: var(--violet);
+}
+
+.data-a {
+    left: 8vw;
+    bottom: 90px;
+}
+
+.data-b {
+    right: 5vw;
+    bottom: 80px;
+
+    border-color: rgba(255,48,79,.4);
+}
+
+.data-b b {
+    color: var(--red);
+}
+
+
+/* =========================================================
+   HEX FIELD
+   ========================================================= */
+
+.hex-field {
+    position: absolute;
+
+    right: 4%;
+    bottom: 60px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 45px);
+
+    gap: 3px;
+
+    opacity: .6;
+}
+
+.hex-field div {
+    width: 45px;
+    height: 52px;
+
+    border: 1px solid var(--line);
+
+    clip-path: polygon(
+        25% 0,
+        75% 0,
+        100% 50%,
+        75% 100%,
+        25% 100%,
+        0 50%
+    );
+}
+
+
+/* =========================================================
+   SECTION BASE
+   ========================================================= */
+
+.section {
+    position: relative;
+
+    padding: 130px 7vw;
+
+    border-bottom: 1px solid var(--line);
+
+    overflow: hidden;
+}
+
+.section-number {
+    position: absolute;
+
+    right: 4vw;
+    top: 40px;
+
+    font-family: "Space Mono";
+
+    font-size: 8px;
+
+    color: var(--grey);
+
+    writing-mode: vertical-rl;
+
+    letter-spacing: 3px;
+}
+
+.section-heading {
+    position: relative;
+
+    margin-bottom: 70px;
+}
+
+.section-heading .code {
+    font-family: "Space Mono";
+
+    color: var(--violet);
+
+    font-size: 8px;
+
+    letter-spacing: 3px;
+}
+
+.section-heading h2 {
+    font-size: clamp(90px, 15vw, 220px);
+
+    line-height: .65;
+
+    text-transform: uppercase;
+
+    font-weight: 900;
+
+    letter-spacing: -8px;
+}
+
+.section-heading h2 span {
+    color: transparent;
+
+    -webkit-text-stroke:
+        1px var(--line);
+}
+
+
+/* =========================================================
+   PROJECTS
+   ========================================================= */
+
+.project-zone {
+    position: relative;
+
+    min-height: 1200px;
+}
+
+
+/* PROJECT NODE */
+
+.project-node {
+    position: absolute;
+
+    width: 390px;
+
+    min-height: 310px;
+
+    border: 1px solid var(--line);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(141,53,255,.11),
+            rgba(5,3,8,.96) 55%
+        );
+
+    padding: 28px;
+
+    transition: .35s;
+
+    overflow: hidden;
+}
+
+.project-node:hover {
+    transform:
+        translateY(-8px)
+        scale(1.015);
+
+    border-color: var(--violet);
+
+    box-shadow:
+        0 0 50px rgba(141,53,255,.16);
+}
+
+.project-node::before {
+    content: "";
+
+    position: absolute;
+
+    width: 100px;
+    height: 100px;
+
+    right: -40px;
+    top: -40px;
+
+    border: 1px solid var(--purple);
+
+    transform: rotate(45deg);
+}
+
+.project-node::after {
+    content: "";
+
+    position: absolute;
+
+    height: 1px;
+
+    left: 0;
+    right: 0;
+
+    top: 52px;
+
+    background: var(--line);
+}
+
+
+/* POSITIONS */
+
+.node-one {
+    left: 0;
+    top: 0;
+
+    width: 530px;
+
+    min-height: 500px;
+}
+
+.node-two {
+    right: 4%;
+    top: 110px;
+}
+
+.node-three {
+    left: 20%;
+    top: 610px;
+
+    width: 360px;
+}
+
+.node-four {
+    right: 0;
+    top: 650px;
+
+    width: 440px;
+}
+
+
+/* PROJECT IMAGE */
+
+.node-image {
+    height: 180px;
+
+    margin: -10px -10px 25px;
+
+    position: relative;
+
+    overflow: hidden;
+
+    background:
+        repeating-linear-gradient(
+            45deg,
+            rgba(141,53,255,.08),
+            rgba(141,53,255,.08) 2px,
+            transparent 2px,
+            transparent 10px
+        );
+}
+
+.node-image img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    opacity: .65;
+
+    mix-blend-mode: screen;
+
+    transition: .4s;
+}
+
+.project-node:hover .node-image img {
+    opacity: 1;
+    transform: scale(1.04);
+}
+
+
+/* NODE INFO */
+
+.node-code {
+    font-family: "Space Mono";
+
+    color: var(--violet);
+
+    font-size: 7px;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 20px;
+}
+
+.node-title {
+    font-size: 52px;
+
+    text-transform: uppercase;
+
+    line-height: .75;
+
+    font-weight: 800;
+
+    margin-bottom: 20px;
+}
+
+.node-text {
+    font-family: "Space Mono";
+
+    font-size: 8px;
+
+    line-height: 1.9;
+
+    color: var(--grey);
+
+    max-width: 400px;
+
+    margin-bottom: 20px;
+}
+
+.node-tags {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 4px;
+
+    margin-bottom: 20px;
+}
+
+.node-tags span {
+    border: 1px solid var(--line);
+
+    padding: 5px 7px;
+
+    color: var(--violet);
+
+    font-family: "Space Mono";
+
+    font-size: 6px;
+}
+
+.node-links {
+    display: flex;
+
+    gap: 20px;
+}
+
+.node-links a {
+    font-family: "Space Mono";
+
+    font-size: 7px;
+
+    color: white;
+
+    border-bottom: 1px solid var(--purple);
+
+    padding-bottom: 3px;
+}
+
+
+/* =========================================================
+   CENTRAL PROJECT MARKER
+   ========================================================= */
+
+.project-marker {
+    position: absolute;
+
+    left: 55%;
+    top: 360px;
+
+    transform: translateX(-50%);
+
+    width: 240px;
+    height: 240px;
+
+    border: 1px solid var(--line);
+
+    clip-path: polygon(
+        25% 0,
+        75% 0,
+        100% 50%,
+        75% 100%,
+        25% 100%,
+        0 50%
+    );
+
+    display: grid;
+
+    place-items: center;
+
+    color: var(--purple);
+
+    font-family: "Space Mono";
+
+    font-size: 8px;
+
+    letter-spacing: 2px;
+
+    animation: float 5s ease-in-out infinite;
+}
+
+.project-marker::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 25px;
+
+    border: 1px dashed var(--line);
+
+    clip-path: inherit;
+}
+
+.project-marker strong {
+    font-size: 35px;
+
+    color: var(--violet);
+}
+
+
+/* =========================================================
+   ABOUT
+   ========================================================= */
+
+.about-zone {
+    min-height: 900px;
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 80px;
+
+    position: relative;
+}
+
+.about-copy {
+    padding-top: 30px;
+}
+
+.about-copy h3 {
+    font-size: clamp(70px, 10vw, 140px);
+
+    line-height: .65;
+
+    text-transform: uppercase;
+
+    font-weight: 900;
+
+    margin-bottom: 60px;
+}
+
+.about-copy h3 span {
+    color: transparent;
+
+    -webkit-text-stroke:
+        1px var(--violet);
+}
+
+.about-copy p {
+    font-family: "Space Mono";
+
+    color: var(--grey);
+
+    font-size: 9px;
+
+    line-height: 2.2;
+
+    max-width: 480px;
+
+    margin-bottom: 20px;
+}
+
+
+/* PERSONNEL HEX */
+
+.personnel {
+    position: relative;
+
+    display: grid;
+
+    place-items: center;
+
+    min-height: 600px;
+}
+
+.personnel-hex {
+    width: 410px;
+    height: 470px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(141,53,255,.2),
+            transparent
+        );
+
+    border: 1px solid var(--line);
+
+    clip-path: polygon(
+        20% 0,
+        80% 0,
+        100% 15%,
+        100% 85%,
+        80% 100%,
+        20% 100%,
+        0 85%,
+        0 15%
+    );
+
+    position: relative;
+}
+
+.personnel-hex::before {
+    content: "T0";
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    font-size: 220px;
+
+    font-weight: 900;
+
+    color: rgba(141,53,255,.12);
+}
+
+.personnel-label {
+    position: absolute;
+
+    left: 25px;
+    top: 25px;
+
+    font-family: "Space Mono";
+
+    font-size: 7px;
+
+    color: var(--violet);
+
+    letter-spacing: 2px;
+}
+
+.personnel-id {
+    position: absolute;
+
+    right: 25px;
+    bottom: 25px;
+
+    font-family: "Space Mono";
+
+    font-size: 7px;
+
+    color: var(--grey);
+
+    text-align: right;
+}
+
+
+/* =========================================================
+   TECHNOLOGY MATRIX
+   ========================================================= */
+
+.tech-matrix {
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(9, 1fr);
+
+    border-top: 1px solid var(--line);
+}
+
+.tech {
+    height: 90px;
+
+    border-right: 1px solid var(--line);
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: space-between;
+
+    padding: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(141,53,255,.04),
+            transparent
+        );
+
+    transition: .2s;
+}
+
+.tech:hover {
+    background: rgba(141,53,255,.15);
+
+    color: var(--violet);
+}
+
+.tech small {
+    font-family: "Space Mono";
+
+    font-size: 6px;
+
+    color: var(--dim);
+}
+
+.tech strong {
+    font-family: "Space Mono";
+
+    font-size: 7px;
+}
+
+
+/* =========================================================
+   CONTACT
+   ========================================================= */
+
+.contact {
+    min-height: 850px;
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+}
+
+.contact-ring {
+    position: absolute;
+
+    right: 5%;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: 550px;
+    height: 550px;
+
+    border: 1px solid var(--line);
+
+    border-radius: 50%;
+}
+
+.contact-ring::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 70px;
+
+    border: 1px dashed var(--purple);
+
+    border-radius: 50%;
+}
+
+.contact-ring::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 170px;
+
+    border: 1px solid var(--violet);
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 0 60px rgba(141,53,255,.2);
+}
+
+.contact-content {
+    position: relative;
+
+    z-index: 4;
+}
+
+.contact-content .code {
+    font-family: "Space Mono";
+
+    font-size: 8px;
+
+    color: var(--red);
+
+    letter-spacing: 3px;
+
+    margin-bottom: 25px;
+}
+
+.contact-content h2 {
+    font-size: clamp(100px, 17vw, 250px);
+
+    font-weight: 900;
+
+    line-height: .62;
+
+    text-transform: uppercase;
+
+    letter-spacing: -10px;
+}
+
+.contact-content h2 span {
+    color: var(--violet);
+
+    text-shadow:
+        0 0 35px rgba(141,53,255,.3);
+}
+
+.contact-content p {
+    max-width: 430px;
+
+    margin-top: 55px;
+
+    margin-bottom: 30px;
+
+    font-family: "Space Mono";
+
+    color: var(--grey);
+
+    font-size: 9px;
+
+    line-height: 2;
+}
+
+.transmission {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 14px 20px;
+
+    border: 1px solid var(--purple);
+
+    font-family: "Space Mono";
+
+    font-size: 8px;
+
+    color: var(--white);
+
+    background: rgba(141,53,255,.08);
+
+    transition: .2s;
+}
+
+.transmission:hover {
+    background: var(--purple);
+
+    box-shadow:
+        0 0 30px rgba(141,53,255,.4);
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+footer {
+    min-height: 100px;
+
+    padding: 25px 7vw;
+
+    border-top: 1px solid var(--line);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    font-family: "Space Mono";
+
+    font-size: 7px;
+
+    color: var(--grey);
+
+    letter-spacing: 1px;
+}
+
+.socials {
+    display: flex;
+
+    gap: 25px;
+}
+
+.socials a:hover {
+    color: var(--violet);
+}
+
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
     }
 
-    .command-link:hover::before {
-      content: "";
+    to {
+        transform: rotate(360deg);
+    }
+}
 
-      position: absolute;
-
-      left: 0;
-
-      width: 3px;
-      height: 45px;
-
-      background: var(--purple);
-
-      box-shadow:
-        0 0 15px var(--purple);
+@keyframes pulse {
+    0%,100% {
+        opacity: .75;
+        transform:
+            translate(-50%, -50%)
+            rotate(30deg)
+            scale(.95);
     }
 
-    .command-bottom {
-      margin-top: auto;
+    50% {
+        opacity: 1;
+        transform:
+            translate(-50%, -50%)
+            rotate(30deg)
+            scale(1.08);
+    }
+}
 
-      font-family: "Space Mono";
-
-      font-size: 7px;
-
-      color: var(--grey);
-
-      writing-mode: vertical-rl;
-
-      letter-spacing: 2px;
+@keyframes float {
+    0%,100% {
+        transform:
+            translateX(-50%)
+            translateY(0);
     }
 
-    /* =========================================================
-       MAIN
-    ========================================================= */
+    50% {
+        transform:
+            translateX(-50%)
+            translateY(-15px);
+    }
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media(max-width: 1000px) {
+
+    .core-system {
+        right: -100px;
+        opacity: .55;
+    }
+
+    .hero-title {
+        left: 8vw;
+    }
+
+    .project-zone {
+        min-height: auto;
+
+        display: flex;
+        flex-direction: column;
+
+        gap: 25px;
+    }
+
+    .project-node,
+    .node-one,
+    .node-two,
+    .node-three,
+    .node-four {
+        position: relative;
+
+        inset: auto;
+
+        width: 100%;
+
+        min-height: 350px;
+    }
+
+    .project-marker {
+        display: none;
+    }
+
+    .about-zone {
+        grid-template-columns: 1fr;
+    }
+
+    .tech-matrix {
+        position: relative;
+
+        grid-template-columns:
+            repeat(3, 1fr);
+
+        margin-top: 80px;
+    }
+
+    .contact-ring {
+        opacity: .25;
+    }
+}
+
+
+@media(max-width: 650px) {
+
+    .system-rail {
+        display: none;
+    }
 
     main {
-      margin-left: 92px;
+        margin-left: 0;
     }
 
-    /* =========================================================
-       TOP STATUS
-    ========================================================= */
-
-    .top-status {
-      height: 45px;
-
-      border-bottom: 1px solid var(--line);
-
-      display: flex;
-
-      align-items: center;
-
-      justify-content: space-between;
-
-      padding: 0 35px;
-
-      font-family: "Space Mono";
-
-      font-size: 8px;
-
-      color: var(--grey);
-
-      letter-spacing: 1px;
-    }
-
-    .status-left,
-    .status-right {
-      display: flex;
-      gap: 25px;
-    }
-
-    .live {
-      color: var(--purple2);
-    }
-
-    .live::before {
-      content: "";
-
-      display: inline-block;
-
-      width: 6px;
-      height: 6px;
-
-      margin-right: 7px;
-
-      background: var(--purple);
-
-      border-radius: 50%;
-
-      box-shadow:
-        0 0 12px var(--purple);
-    }
-
-    /* =========================================================
-       MAIN INTERFACE
-    ========================================================= */
-
-    .interface {
-      min-height: calc(100vh - 45px);
-
-      position: relative;
-
-      padding: 55px;
-
-      overflow: hidden;
-    }
-
-    /* =========================================================
-       GIANT BACKGROUND NUMBER
-    ========================================================= */
-
-    .background-number {
-      position: absolute;
-
-      right: -30px;
-      top: 10px;
-
-      font-size: min(45vw, 650px);
-
-      line-height: .7;
-
-      font-weight: 800;
-
-      color: rgba(155,77,255,.035);
-
-      user-select: none;
-
-      pointer-events: none;
-    }
-
-    /* =========================================================
-       HERO / COMMAND DISPLAY
-    ========================================================= */
-
-    .command-display {
-      min-height: 680px;
-
-      display: grid;
-
-      grid-template-columns:
-        minmax(0, 1.2fr)
-        minmax(300px, .8fr);
-
-      position: relative;
-
-      gap: 25px;
-    }
-
-    .command-main {
-      position: relative;
-
-      display: flex;
-
-      flex-direction: column;
-
-      justify-content: center;
-
-      padding: 50px;
-
-      border-left: 1px solid var(--line);
-
-      border-bottom: 1px solid var(--line);
-    }
-
-    .command-main::before {
-      content: "";
-
-      position: absolute;
-
-      top: 0;
-      left: 0;
-
-      width: 150px;
-      height: 3px;
-
-      background: var(--purple);
-
-      box-shadow:
-        0 0 20px var(--purple);
-    }
-
-    .command-main::after {
-      content: "01";
-
-      position: absolute;
-
-      right: 20px;
-      top: 20px;
-
-      color: var(--purple);
-
-      font-family: "Space Mono";
-
-      font-size: 10px;
-    }
-
-    .classification {
-      color: var(--purple2);
-
-      font-family: "Space Mono";
-
-      font-size: 9px;
-
-      letter-spacing: 3px;
-
-      margin-bottom: 25px;
-    }
-
-    .classification span {
-      color: var(--grey);
-    }
-
-    .command-main h1 {
-      font-size: clamp(80px, 12vw, 170px);
-
-      line-height: .72;
-
-      letter-spacing: -5px;
-
-      text-transform: uppercase;
-
-      font-weight: 800;
-
-      margin-bottom: 50px;
-    }
-
-    .command-main h1 em {
-      display: block;
-
-      color: var(--purple2);
-
-      font-style: normal;
-
-      text-shadow:
-        0 0 30px rgba(155,77,255,.3);
-    }
-
-    .command-description {
-      max-width: 550px;
-
-      color: var(--grey);
-
-      font-family: "Space Mono";
-
-      font-size: 10px;
-
-      line-height: 2;
-
-      border-left: 2px solid var(--purple);
-
-      padding-left: 15px;
-
-      margin-bottom: 35px;
-    }
-
-    /* =========================================================
-       BUTTONS
-    ========================================================= */
-
-    .interface-buttons {
-      display: flex;
-
-      gap: 10px;
-    }
-
-    .interface-button {
-      padding: 13px 20px;
-
-      border: 1px solid var(--line);
-
-      font-family: "Space Mono";
-
-      font-size: 9px;
-
-      text-transform: uppercase;
-
-      letter-spacing: 1px;
-
-      transition: .2s;
-    }
-
-    .interface-button.primary {
-      background: var(--purple);
-
-      border-color: var(--purple);
-
-      color: white;
-
-      box-shadow:
-        0 0 25px rgba(155,77,255,.25);
-    }
-
-    .interface-button:hover {
-      border-color: var(--purple2);
-
-      color: var(--purple2);
-
-      transform: translateX(3px);
-    }
-
-    .interface-button.primary:hover {
-      color: white;
-
-      background: var(--purple3);
-    }
-
-    /* =========================================================
-       RIGHT CONTROL PANEL
-    ========================================================= */
-
-    .control-panel {
-      position: relative;
-
-      border: 1px solid var(--line);
-
-      background:
-        linear-gradient(
-          135deg,
-          rgba(155,77,255,.09),
-          transparent 45%
-        );
-
-      padding: 25px;
-
-      display: flex;
-
-      flex-direction: column;
-
-      justify-content: space-between;
-    }
-
-    .panel-header {
-      display: flex;
-
-      justify-content: space-between;
-
-      font-family: "Space Mono";
-
-      font-size: 8px;
-
-      color: var(--grey);
-
-      border-bottom: 1px solid var(--line);
-
-      padding-bottom: 12px;
-    }
-
-    .panel-header strong {
-      color: var(--purple2);
-    }
-
-    /* =========================================================
-       CORE
-    ========================================================= */
-
-    .core {
-      width: 250px;
-      height: 250px;
-
-      margin: auto;
-
-      border: 1px solid var(--purple);
-
-      position: relative;
-
-      transform: rotate(45deg);
-
-      box-shadow:
-        0 0 60px rgba(155,77,255,.10);
-    }
-
-    .core::before {
-      content: "";
-
-      position: absolute;
-
-      inset: 25px;
-
-      border: 1px solid var(--purple2);
-    }
-
-    .core::after {
-      content: "";
-
-      position: absolute;
-
-      inset: 60px;
-
-      background:
-        radial-gradient(
-          circle,
-          var(--purple2),
-          var(--purple3) 35%,
-          transparent 70%
-        );
-
-      box-shadow:
-        0 0 60px var(--purple);
-    }
-
-    .core-label {
-      text-align: center;
-
-      font-family: "Space Mono";
-
-      font-size: 9px;
-
-      color: var(--grey);
-
-      letter-spacing: 2px;
-    }
-
-    .core-label strong {
-      color: var(--purple2);
-    }
-
-    /* =========================================================
-       DATA BARS
-    ========================================================= */
-
-    .data-bars {
-      display: flex;
-
-      flex-direction: column;
-
-      gap: 14px;
-
-      margin-top: 25px;
-    }
-
-    .data-row {
-      display: grid;
-
-      grid-template-columns: 75px 1fr 35px;
-
-      gap: 10px;
-
-      align-items: center;
-
-      font-family: "Space Mono";
-
-      font-size: 7px;
-
-      color: var(--grey);
-    }
-
-    .bar {
-      height: 4px;
-
-      background: #211a26;
-
-      position: relative;
-    }
-
-    .bar span {
-      display: block;
-
-      height: 100%;
-
-      background: var(--purple);
-
-      box-shadow:
-        0 0 8px var(--purple);
-    }
-
-    /* =========================================================
-       PROJECT SECTION
-    ========================================================= */
-
-    .operations {
-      padding-top: 120px;
-
-      position: relative;
-    }
-
-    .operation-header {
-      display: grid;
-
-      grid-template-columns: 180px 1fr;
-
-      border-top: 1px solid var(--line);
-
-      border-bottom: 1px solid var(--line);
-
-      padding: 25px 0;
-
-      margin-bottom: 40px;
-    }
-
-    .operation-number {
-      color: var(--purple2);
-
-      font-family: "Space Mono";
-
-      font-size: 9px;
-    }
-
-    .operation-title {
-      font-size: 70px;
-
-      line-height: .8;
-
-      text-transform: uppercase;
-
-      font-weight: 800;
-
-      letter-spacing: -2px;
-    }
-
-    .operation-subtitle {
-      color: var(--grey);
-
-      font-family: "Space Mono";
-
-      font-size: 9px;
-
-      margin-top: 15px;
-    }
-
-    /* =========================================================
-       PROJECT GRID
-    ========================================================= */
-
-    .project-grid {
-      display: grid;
-
-      grid-template-columns:
-        1.4fr
-        .6fr;
-
-      gap: 18px;
-    }
-
-    .project {
-      position: relative;
-
-      min-height: 540px;
-
-      border: 1px solid var(--line);
-
-      background: var(--black2);
-
-      overflow: hidden;
-
-      transition: .3s;
-    }
-
-    .project:hover {
-      border-color: var(--purple);
-
-      box-shadow:
-        0 0 40px rgba(155,77,255,.08);
-    }
-
-    .project.large {
-      grid-row: span 2;
-    }
-
-    .project-image {
-      position: absolute;
-
-      inset: 0;
-
-      background:
-        radial-gradient(
-          circle at 50% 45%,
-          rgba(155,77,255,.18),
-          transparent 40%
-        );
-
-      display: flex;
-
-      align-items: center;
-
-      justify-content: center;
-    }
-
-    .project-image img {
-      width: 100%;
-      height: 100%;
-
-      object-fit: cover;
-
-      opacity: .72;
-
-      transition: .4s;
-    }
-
-    .project:hover img {
-      opacity: .95;
-
-      transform: scale(1.04);
-    }
-
-    .project::after {
-      content: "";
-
-      position: absolute;
-
-      inset: 0;
-
-      background:
-        linear-gradient(
-          transparent 40%,
-          rgba(5,3,7,.95) 85%
-        );
-
-      pointer-events: none;
-    }
-
-    .project-info {
-      position: absolute;
-
-      left: 25px;
-      right: 25px;
-      bottom: 25px;
-
-      z-index: 3;
-    }
-
-    .project-code {
-      font-family: "Space Mono";
-
-      color: var(--purple2);
-
-      font-size: 8px;
-
-      letter-spacing: 2px;
-
-      margin-bottom: 10px;
-    }
-
-    .project-title {
-      font-size: 45px;
-
-      text-transform: uppercase;
-
-      line-height: .85;
-
-      margin-bottom: 15px;
-    }
-
-    .project-description {
-      max-width: 520px;
-
-      color: #aaa1af;
-
-      font-family: "Space Mono";
-
-      font-size: 9px;
-
-      line-height: 1.8;
-
-      margin-bottom: 18px;
-    }
-
-    .tags {
-      display: flex;
-
-      gap: 5px;
-
-      flex-wrap: wrap;
-
-      margin-bottom: 18px;
-    }
-
-    .tag {
-      padding: 5px 8px;
-
-      border: 1px solid var(--line);
-
-      color: var(--purple2);
-
-      font-family: "Space Mono";
-
-      font-size: 7px;
-    }
-
-    .project-links {
-      display: flex;
-
-      gap: 15px;
-    }
-
-    .project-link {
-      color: white;
-
-      font-family: "Space Mono";
-
-      font-size: 8px;
-
-      border-bottom: 1px solid var(--purple);
-
-      padding-bottom: 3px;
-    }
-
-    /* =========================================================
-       ABOUT
-    ========================================================= */
-
-    .about-section {
-      padding-top: 150px;
-    }
-
-    .about-interface {
-      display: grid;
-
-      grid-template-columns: 1fr 1fr;
-
-      border: 1px solid var(--line);
-    }
-
-    .about-main {
-      padding: 50px;
-
-      border-right: 1px solid var(--line);
-
-      min-height: 450px;
-    }
-
-    .about-label {
-      color: var(--purple2);
-
-      font-family: "Space Mono";
-
-      font-size: 8px;
-
-      letter-spacing: 2px;
-
-      margin-bottom: 40px;
-    }
-
-    .about-main h2 {
-      font-size: 75px;
-
-      line-height: .8;
-
-      text-transform: uppercase;
-
-      margin-bottom: 35px;
-    }
-
-    .about-text {
-      max-width: 500px;
-
-      color: var(--grey);
-
-      font-family: "Space Mono";
-
-      font-size: 10px;
-
-      line-height: 2;
+    .top-strip {
+        padding: 0 12px;
     }
 
-    .about-text p + p {
-      margin-top: 20px;
+    .hero {
+        min-height: 800px;
     }
 
-    /* =========================================================
-       SKILL MATRIX
-    ========================================================= */
-
-    .skill-panel {
-      padding: 35px;
+    .hero-title {
+        top: 120px;
+        left: 25px;
     }
-
-    .skill-panel-title {
-      color: var(--purple2);
-
-      font-family: "Space Mono";
 
-      font-size: 8px;
+    .hero-title h1 {
+        font-size: 90px;
 
-      letter-spacing: 2px;
-
-      margin-bottom: 25px;
+        letter-spacing: -5px;
     }
-
-    .skill-matrix {
-      display: grid;
-
-      grid-template-columns: repeat(3, 1fr);
 
-      gap: 1px;
-
-      background: var(--line);
+    .hero-title h1 span {
+        transform: translateX(25px);
     }
-
-    .skill {
-      min-height: 100px;
-
-      padding: 15px;
 
-      background: var(--black2);
+    .core-system {
+        width: 300px;
+        height: 300px;
 
-      display: flex;
-
-      flex-direction: column;
-
-      justify-content: space-between;
-
-      transition: .2s;
-    }
-
-    .skill:hover {
-      background: rgba(155,77,255,.08);
+        right: -80px;
+        top: 390px;
     }
 
-    .skill-number {
-      color: var(--dark-grey);
-
-      font-family: "Space Mono";
-
-      font-size: 8px;
+    .section {
+        padding: 90px 25px;
     }
-
-    .skill-name {
-      color: var(--white);
 
-      font-family: "Space Mono";
+    .section-heading h2 {
+        font-size: 80px;
 
-      font-size: 9px;
+        letter-spacing: -4px;
     }
-
-    .skill:hover .skill-name {
-      color: var(--purple2);
-    }
-
-    /* =========================================================
-       CONTACT
-    ========================================================= */
 
-    .contact-section {
-      padding: 150px 0 100px;
+    .node-title {
+        font-size: 42px;
     }
 
-    .contact-interface {
-      position: relative;
-
-      min-height: 430px;
-
-      border: 1px solid var(--line);
-
-      overflow: hidden;
-
-      background:
-        radial-gradient(
-          circle at 75% 50%,
-          rgba(155,77,255,.18),
-          transparent 30%
-        );
+    .personnel-hex {
+        width: 300px;
+        height: 370px;
     }
-
-    .contact-warning {
-      height: 40px;
-
-      border-bottom: 1px solid var(--line);
-
-      display: flex;
-
-      align-items: center;
-
-      padding: 0 20px;
-
-      font-family: "Space Mono";
-
-      font-size: 8px;
-
-      color: var(--purple2);
 
-      letter-spacing: 2px;
+    .tech-matrix {
+        grid-template-columns:
+            repeat(2, 1fr);
     }
 
-    .contact-content {
-      padding: 55px;
+    .contact {
+        min-height: 700px;
     }
 
     .contact-content h2 {
-      font-size: clamp(70px, 10vw, 130px);
+        font-size: 90px;
 
-      line-height: .7;
-
-      text-transform: uppercase;
-
-      letter-spacing: -5px;
-
-      margin-bottom: 35px;
+        letter-spacing: -5px;
     }
 
-    .contact-content h2 span {
-      color: var(--purple2);
+    .contact-ring {
+        width: 400px;
+        height: 400px;
+
+        right: -200px;
     }
-
-    .contact-content p {
-      max-width: 500px;
-
-      color: var(--grey);
-
-      font-family: "Space Mono";
-
-      font-size: 10px;
-
-      line-height: 2;
-
-      margin-bottom: 25px;
-    }
-
-    .terminal {
-      position: absolute;
-
-      right: 35px;
-      bottom: 30px;
-
-      width: 250px;
-
-      padding: 18px;
-
-      border: 1px solid var(--line);
-
-      background: rgba(5,3,7,.75);
-
-      font-family: "Space Mono";
-
-      font-size: 7px;
-
-      line-height: 2;
-
-      color: var(--grey);
-    }
-
-    .terminal b {
-      color: var(--purple2);
-    }
-
-    /* =========================================================
-       FOOTER
-    ========================================================= */
 
     footer {
-      padding: 25px 0 45px;
-
-      display: flex;
-
-      justify-content: space-between;
-
-      border-top: 1px solid var(--line);
-
-      color: var(--grey);
-
-      font-family: "Space Mono";
-
-      font-size: 7px;
-
-      letter-spacing: 1px;
-    }
-
-    .socials {
-      display: flex;
-
-      gap: 20px;
-    }
-
-    .socials a:hover {
-      color: var(--purple2);
-    }
-
-    /* =========================================================
-       MOBILE
-    ========================================================= */
-
-    @media(max-width: 900px) {
-
-      .command-bar {
-        display: none;
-      }
-
-      main {
-        margin-left: 0;
-      }
-
-      .interface {
-        padding: 30px 20px;
-      }
-
-      .command-display {
-        grid-template-columns: 1fr;
-      }
-
-      .control-panel {
-        min-height: 400px;
-      }
-
-      .project-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .project.large {
-        grid-row: auto;
-      }
-
-      .about-interface {
-        grid-template-columns: 1fr;
-      }
-
-      .about-main {
-        border-right: 0;
-        border-bottom: 1px solid var(--line);
-      }
-
-      .terminal {
-        display: none;
-      }
-    }
-
-    @media(max-width: 600px) {
-
-      .top-status {
-        padding: 0 15px;
-      }
-
-      .status-right {
-        display: none;
-      }
-
-      .interface {
-        padding: 20px 15px;
-      }
-
-      .command-main {
-        padding: 30px 20px;
-      }
-
-      .command-main h1 {
-        font-size: 70px;
-
-        letter-spacing: -3px;
-      }
-
-      .operation-header {
-        grid-template-columns: 80px 1fr;
-      }
-
-      .operation-title {
-        font-size: 48px;
-      }
-
-      .project-title {
-        font-size: 36px;
-      }
-
-      .about-main {
-        padding: 30px 20px;
-      }
-
-      .about-main h2 {
-        font-size: 60px;
-      }
-
-      .skill-panel {
-        padding: 20px;
-      }
-
-      .skill-matrix {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .contact-content {
-        padding: 35px 20px;
-      }
-
-      .contact-content h2 {
-        font-size: 70px;
-      }
-
-      footer {
         flex-direction: column;
 
-        gap: 15px;
-      }
+        align-items: flex-start;
+
+        gap: 20px;
     }
-  </style>
+}
+
+</style>
 </head>
+
 
 <body>
 
-  <!-- =======================================================
-       COMMAND BAR
-  ======================================================== -->
 
-  <aside class="command-bar">
+<!-- =========================================================
+     SYSTEM RAIL
+     ========================================================= -->
 
-    <a href="#" class="command-logo">
-      T0
-    </a>
+<aside class="system-rail">
 
-    <nav class="command-links">
+    <div class="rail-mark">
+        T0
+    </div>
 
-      <a href="#" class="command-link">
-        HOME
-      </a>
+    <div class="rail-line"></div>
 
-      <a href="#projects" class="command-link">
-        PROJECTS
-      </a>
+    <nav class="rail-links">
 
-      <a href="#about" class="command-link">
-        PERSONNEL
-      </a>
+        <a href="#">
+            SYSTEM
+        </a>
 
-      <a href="#contact" class="command-link">
-        CONTACT
-      </a>
+        <a href="#projects">
+            TARGETS
+        </a>
+
+        <a href="#about">
+            PERSONNEL
+        </a>
+
+        <a href="#contact">
+            CONTACT
+        </a>
 
     </nav>
 
-    <div class="command-bottom">
-      SYSTEM // ONLINE
+    <div class="rail-bottom">
+        INTERFACE // 01
     </div>
 
-  </aside>
+</aside>
 
 
-  <main>
-
-    <!-- =====================================================
-         STATUS BAR
-    ====================================================== -->
-
-    <div class="top-status">
-
-      <div class="status-left">
-
-        <span class="live">
-          SYSTEM ONLINE
-        </span>
-
-        <span>
-          T0KAKU // PORTFOLIO
-        </span>
-
-      </div>
-
-      <div class="status-right">
-
-        <span>
-          SIGNAL 98%
-        </span>
-
-        <span>
-          BUILD 2026
-        </span>
-
-        <span>
-          NO. 01
-        </span>
-
-      </div>
-
-    </div>
+<main>
 
 
-    <div class="interface">
+<!-- =========================================================
+     TOP STRIP
+     ========================================================= -->
 
-      <div class="background-number">
+<div class="top-strip">
+
+    <span class="signal">
+        SYSTEM ONLINE
+    </span>
+
+    <span>
+        T0KAKU // CREATIVE INTERFACE
+    </span>
+
+    <span>
+        2026 // 01:00:00
+    </span>
+
+</div>
+
+
+<!-- =========================================================
+     HERO
+     ========================================================= -->
+
+<section class="hero">
+
+    <div class="hero-number">
         01
-      </div>
+    </div>
+
+    <div class="hero-diagonal"></div>
 
 
-      <!-- ===================================================
-           COMMAND DISPLAY
-      ==================================================== -->
+    <div class="hero-title">
 
-      <section class="command-display">
-
-        <div class="command-main">
-
-          <div class="classification">
-            CREATIVE PERSONNEL
-            <span>// IDENTIFICATION ACCEPTED</span>
-          </div>
-
-          <h1>
-            T0kaku
-            <em>Portfolio</em>
-          </h1>
-
-          <p class="command-description">
-            I'm a developer and creator focused on building
-            clean, useful and thoughtful digital experiences.
-            <br><br>
-            SYSTEM NOTE:
-            Turning ideas into functional digital interfaces.
-          </p>
-
-          <div class="interface-buttons">
-
-            <a
-              href="#projects"
-              class="interface-button primary"
-            >
-              ENTER PROJECTS →
-            </a>
-
-            <a
-              href="#contact"
-              class="interface-button"
-            >
-              OPEN CHANNEL
-            </a>
-
-          </div>
-
+        <div class="small">
+            PERSONNEL IDENTIFICATION // T0KAKU
         </div>
 
+        <h1>
+            T0
+            <span>KAKU</span>
+        </h1>
 
-        <!-- CONTROL PANEL -->
-
-        <div class="control-panel">
-
-          <div class="panel-header">
-
-            <span>
-              SYNCHRONIZATION
-            </span>
-
-            <strong>
-              100.00%
-            </strong>
-
-          </div>
-
-          <div>
-
-            <div class="core"></div>
-
-            <div class="core-label">
-
-              CREATIVE CORE
-              <br>
-
-              <strong>
-                STABLE
-              </strong>
-
-            </div>
-
-          </div>
-
-
-          <div class="data-bars">
-
-            <div class="data-row">
-
-              <span>
-                DESIGN
-              </span>
-
-              <div class="bar">
-                <span style="width:94%"></span>
-              </div>
-
-              <span>
-                94
-              </span>
-
-            </div>
-
-            <div class="data-row">
-
-              <span>
-                CODE
-              </span>
-
-              <div class="bar">
-                <span style="width:91%"></span>
-              </div>
-
-              <span>
-                91
-              </span>
-
-            </div>
-
-            <div class="data-row">
-
-              <span>
-                IDEAS
-              </span>
-
-              <div class="bar">
-                <span style="width:97%"></span>
-              </div>
-
-              <span>
-                97
-              </span>
-
-            </div>
-
-          </div>
-
+        <div class="sub">
+            CREATIVE DEVELOPER / DIGITAL CREATOR<br>
+            SYSTEM STATUS: OPERATIONAL<br>
+            ACCESS LEVEL: PUBLIC
         </div>
 
-      </section>
+    </div>
 
 
-      <!-- ===================================================
-           PROJECTS
-      ==================================================== -->
+    <!-- CORE -->
 
-      <section
-        id="projects"
-        class="operations"
-      >
+    <div class="core-system">
 
-        <div class="operation-header">
+        <div class="core-ring"></div>
+        <div class="core-ring two"></div>
+        <div class="core-ring three"></div>
 
-          <div class="operation-number">
-            OPERATION<br>
-            02 / 04
-          </div>
+        <div class="core-cross"></div>
+        <div class="core-cross horizontal"></div>
 
-          <div>
+        <div class="core"></div>
 
-            <h2 class="operation-title">
-              Projects
-            </h2>
-
-            <p class="operation-subtitle">
-              SELECTED DIGITAL OPERATIONS // ARCHIVE ACCESS
-            </p>
-
-          </div>
-
+        <div class="core-label">
+            SYNCHRONIZATION<br>
+            <strong>100.00%</strong><br>
+            CORE STATUS // STABLE
         </div>
 
+    </div>
 
-        <div class="project-grid">
+
+    <!-- DATA -->
+
+    <div class="data-box data-a">
+
+        DESIGN CAPACITY:
+        <b>HIGH</b><br>
+
+        CODE INTEGRITY:
+        <b>STABLE</b><br>
+
+        CREATIVE OUTPUT:
+        <b>ACTIVE</b>
+
+    </div>
 
 
-          <!-- PROJECT 01 -->
+    <div class="data-box data-b">
 
-          <article class="project large">
+        WARNING // VISUAL SYSTEM<br>
 
-            <div class="project-image">
+        <b>UNCONVENTIONAL INTERFACE</b><br>
 
-              <img
-                src="dnd world my/atachment/Pasted image 20250903191839.png"
-                alt="Project One preview"
-              >
+        USER EXPECTATION:
+        <b>IGNORED</b>
+
+    </div>
+
+
+    <!-- HEX FIELD -->
+
+    <div class="hex-field">
+
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     PROJECTS
+     ========================================================= -->
+
+<section
+    id="projects"
+    class="section"
+>
+
+    <div class="section-number">
+        OPERATION 02 // TARGET ARCHIVE
+    </div>
+
+
+    <div class="section-heading">
+
+        <div class="code">
+            TARGET DATABASE // ACCESS GRANTED
+        </div>
+
+        <h2>
+            PRO<span>JECTS</span>
+        </h2>
+
+    </div>
+
+
+    <div class="project-zone">
+
+
+        <!-- PROJECT 01 -->
+
+        <article class="project-node node-one">
+
+            <div class="node-image">
+
+                <img
+                    src="dnd world my/atachment/Pasted image 20250903191839.png"
+                    alt="Project One"
+                >
 
             </div>
 
-            <div class="project-info">
+            <div class="node-code">
+                TARGET 01 // ACTIVE
+            </div>
 
-              <div class="project-code">
-                OPERATION 01 // ACTIVE
-              </div>
-
-              <h3 class="project-title">
+            <h3 class="node-title">
                 Project One
-              </h3>
+            </h3>
 
-              <p class="project-description">
+            <p class="node-text">
                 A short description of what this project does,
                 what problem it solves and why it was built.
-              </p>
+            </p>
 
-              <div class="tags">
+            <div class="node-tags">
+                <span>HTML</span>
+                <span>CSS</span>
+                <span>JAVASCRIPT</span>
+            </div>
 
-                <span class="tag">
-                  HTML
-                </span>
+            <div class="node-links">
 
-                <span class="tag">
-                  CSS
-                </span>
-
-                <span class="tag">
-                  JAVASCRIPT
-                </span>
-
-              </div>
-
-              <div class="project-links">
-
-                <a href="#" class="project-link">
-                  LIVE DEMO →
+                <a href="#">
+                    LIVE DEMO →
                 </a>
 
-                <a href="#" class="project-link">
-                  GITHUB →
+                <a href="#">
+                    GITHUB →
                 </a>
-
-              </div>
 
             </div>
 
-          </article>
+        </article>
 
 
-          <!-- PROJECT 02 -->
+        <!-- PROJECT 02 -->
 
-          <article class="project">
+        <article class="project-node node-two">
 
-            <div class="project-image">
-
-              <div
-                style="
-                  color:#958a9f;
-                  font-family:'Space Mono';
-                  font-size:8px;
-                  letter-spacing:2px;
-                "
-              >
-                PROJECT PREVIEW
-              </div>
-
+            <div class="node-code">
+                TARGET 02 // ACTIVE
             </div>
 
-            <div class="project-info">
-
-              <div class="project-code">
-                OPERATION 02 // ACTIVE
-              </div>
-
-              <h3 class="project-title">
+            <h3 class="node-title">
                 Project Two
-              </h3>
+            </h3>
 
-              <p class="project-description">
+            <p class="node-text">
                 A modern web application built to make
                 a specific workflow faster and easier.
-              </p>
+            </p>
 
-              <div class="tags">
+            <div class="node-tags">
+                <span>REACT</span>
+                <span>TYPESCRIPT</span>
+                <span>API</span>
+            </div>
 
-                <span class="tag">
-                  REACT
-                </span>
+            <div class="node-links">
 
-                <span class="tag">
-                  TYPESCRIPT
-                </span>
-
-                <span class="tag">
-                  API
-                </span>
-
-              </div>
-
-              <div class="project-links">
-
-                <a href="#" class="project-link">
-                  LIVE DEMO →
+                <a href="#">
+                    LIVE DEMO →
                 </a>
 
-                <a href="#" class="project-link">
-                  GITHUB →
+                <a href="#">
+                    GITHUB →
                 </a>
-
-              </div>
 
             </div>
 
-          </article>
+        </article>
 
 
-          <!-- PROJECT 03 -->
+        <!-- PROJECT 03 -->
 
-          <article class="project">
+        <article class="project-node node-three">
 
-            <div class="project-image">
-
-              <div
-                style="
-                  color:#958a9f;
-                  font-family:'Space Mono';
-                  font-size:8px;
-                  letter-spacing:2px;
-                "
-              >
-                PROJECT PREVIEW
-              </div>
-
+            <div class="node-code">
+                TARGET 03 // EXPERIMENTAL
             </div>
 
-            <div class="project-info">
-
-              <div class="project-code">
-                OPERATION 03 // EXPERIMENTAL
-              </div>
-
-              <h3 class="project-title">
+            <h3 class="node-title">
                 Project Three
-              </h3>
+            </h3>
 
-              <p class="project-description">
+            <p class="node-text">
                 An experimental project exploring new ideas,
                 technologies and interaction patterns.
-              </p>
+            </p>
 
-              <div class="tags">
+            <div class="node-tags">
+                <span>PYTHON</span>
+                <span>AI</span>
+            </div>
 
-                <span class="tag">
-                  PYTHON
-                </span>
+            <div class="node-links">
 
-                <span class="tag">
-                  AI
-                </span>
-
-              </div>
-
-              <div class="project-links">
-
-                <a href="#" class="project-link">
-                  VIEW PROJECT →
+                <a href="#">
+                    VIEW PROJECT →
                 </a>
 
-              </div>
-
             </div>
 
-          </article>
+        </article>
 
 
-          <!-- PROJECT 04 -->
+        <!-- PROJECT 04 -->
 
-          <article class="project">
+        <article class="project-node node-four">
 
-            <div class="project-image">
-
-              <div
-                style="
-                  color:#958a9f;
-                  font-family:'Space Mono';
-                  font-size:8px;
-                  letter-spacing:2px;
-                "
-              >
-                PROJECT PREVIEW
-              </div>
-
+            <div class="node-code">
+                TARGET 04 // ACTIVE
             </div>
 
-            <div class="project-info">
-
-              <div class="project-code">
-                OPERATION 04 // ACTIVE
-              </div>
-
-              <h3 class="project-title">
+            <h3 class="node-title">
                 Project Four
-              </h3>
+            </h3>
 
-              <p class="project-description">
+            <p class="node-text">
                 Another project description. Explain the idea,
                 technology and result in a few sentences.
-              </p>
+            </p>
 
-              <div class="tags">
+            <div class="node-tags">
+                <span>NEXT.JS</span>
+                <span>NODE.JS</span>
+            </div>
 
-                <span class="tag">
-                  NEXT.JS
-                </span>
+            <div class="node-links">
 
-                <span class="tag">
-                  NODE.JS
-                </span>
-
-              </div>
-
-              <div class="project-links">
-
-                <a href="#" class="project-link">
-                  LIVE DEMO →
+                <a href="#">
+                    LIVE DEMO →
                 </a>
 
-                <a href="#" class="project-link">
-                  GITHUB →
+                <a href="#">
+                    GITHUB →
                 </a>
 
-              </div>
-
             </div>
 
-          </article>
-
-        </div>
-
-      </section>
+        </article>
 
 
-      <!-- ===================================================
-           ABOUT
-      ==================================================== -->
+        <!-- CENTRAL MARKER -->
 
-      <section
-        id="about"
-        class="about-section"
-      >
+        <div class="project-marker">
 
-        <div class="operation-header">
-
-          <div class="operation-number">
-            PERSONNEL<br>
-            03 / 04
-          </div>
-
-          <div>
-
-            <h2 class="operation-title">
-              About
-            </h2>
-
-            <p class="operation-subtitle">
-              PERSONNEL FILE // ACCESS GRANTED
-            </p>
-
-          </div>
-
-        </div>
-
-
-        <div class="about-interface">
-
-          <div class="about-main">
-
-            <div class="about-label">
-              T0KAKU // PERSONNEL RECORD
+            <div>
+                TARGET<br>
+                <strong>∞</strong><br>
+                UNDEFINED
             </div>
 
-            <h2>
-              A little<br>
-              about me
-            </h2>
-
-            <div class="about-text">
-
-              <p>
-                I'm a developer who enjoys turning ideas into
-                simple, functional and polished digital products.
-              </p>
-
-              <p>
-                I care about good design, clean code and building
-                experiences that feel effortless to use.
-              </p>
-
-            </div>
-
-          </div>
-
-
-          <div class="skill-panel">
-
-            <div class="skill-panel-title">
-              TECHNOLOGY MATRIX // LOADED
-            </div>
-
-            <div class="skill-matrix">
-
-              <div class="skill">
-                <span class="skill-number">01</span>
-                <span class="skill-name">HTML</span>
-              </div>
-
-              <div class="skill">
-                <span class="skill-number">02</span>
-                <span class="skill-name">CSS</span>
-              </div>
-
-              <div class="skill">
-                <span class="skill-number">03</span>
-                <span class="skill-name">JAVASCRIPT</span>
-              </div>
-
-              <div class="skill">
-                <span class="skill-number">04</span>
-                <span class="skill-name">TYPESCRIPT</span>
-              </div>
-
-              <div class="skill">
-                <span class="skill-number">05</span>
-                <span class="skill-name">REACT</span>
-              </div>
-
-              <div class="skill">
-                <span class="skill-number">06</span>
-                <span class="skill-name">NEXT.JS</span>
-              </div>
-
-              <div class="skill">
-                <span class="skill-number">07</span>
-                <span class="skill-name">NODE.JS</span>
-              </div>
-
-              <div class="skill">
-                <span class="skill-number">08</span>
-                <span class="skill-name">PYTHON</span>
-              </div>
-
-              <div class="skill">
-                <span class="skill-number">09</span>
-                <span class="skill-name">GIT</span>
-              </div>
-
-            </div>
-
-          </div>
-
         </div>
-
-      </section>
-
-
-      <!-- ===================================================
-           CONTACT
-      ==================================================== -->
-
-      <section
-        id="contact"
-        class="contact-section"
-      >
-
-        <div class="operation-header">
-
-          <div class="operation-number">
-            CONTACT<br>
-            04 / 04
-          </div>
-
-          <div>
-
-            <h2 class="operation-title">
-              Contact
-            </h2>
-
-            <p class="operation-subtitle">
-              COMMUNICATION CHANNEL // OPEN
-            </p>
-
-          </div>
-
-        </div>
-
-
-        <div class="contact-interface">
-
-          <div class="contact-warning">
-            ◆ COMMUNICATION CHANNEL ACTIVE // AWAITING INPUT
-          </div>
-
-          <div class="contact-content">
-
-            <h2>
-              Have an<br>
-              <span>idea?</span>
-            </h2>
-
-            <p>
-              I'm always interested in hearing about new projects,
-              ideas and opportunities.
-            </p>
-
-            <a
-              href="mailto:T0kaku@proton.me"
-              class="interface-button primary"
-            >
-              SEND TRANSMISSION →
-            </a>
-
-          </div>
-
-
-          <div class="terminal">
-
-            CONNECTION_STATUS:
-            <b>OPEN</b>
-            <br>
-
-            CHANNEL:
-            <b>EMAIL</b>
-            <br>
-
-            ADDRESS:
-            <b>T0KAKU@PROTON.ME</b>
-            <br>
-
-            SIGNAL:
-            <b>STABLE</b>
-            <br><br>
-
-            WAITING_FOR_INPUT...
-
-          </div>
-
-        </div>
-
-      </section>
-
-
-      <!-- ===================================================
-           FOOTER
-      ==================================================== -->
-
-      <footer>
-
-        <span>
-          T0KAKU // SYSTEM OPERATIONAL // © 2026
-        </span>
-
-        <div class="socials">
-
-          <a href="#" target="_blank">
-            GITHUB
-          </a>
-
-          <a href="#" target="_blank">
-            LINKEDIN
-          </a>
-
-          <a href="#" target="_blank">
-            X
-          </a>
-
-        </div>
-
-      </footer>
 
     </div>
 
-  </main>
+</section>
+
+
+
+<!-- =========================================================
+     ABOUT
+     ========================================================= -->
+
+<section
+    id="about"
+    class="section"
+>
+
+    <div class="section-number">
+        PERSONNEL 03 // DATA RECORD
+    </div>
+
+
+    <div class="section-heading">
+
+        <div class="code">
+            PERSONNEL DATABASE // T0KAKU
+        </div>
+
+        <h2>
+            AB<span>OUT</span>
+        </h2>
+
+    </div>
+
+
+    <div class="about-zone">
+
+
+        <div class="about-copy">
+
+            <h3>
+                <span>IDEAS</span><br>
+                INTO<br>
+                THINGS
+            </h3>
+
+            <p>
+                I'm a developer who enjoys turning ideas into
+                simple, functional and polished digital products.
+            </p>
+
+            <p>
+                I care about good design, clean code and building
+                experiences that feel effortless to use.
+            </p>
+
+        </div>
+
+
+        <div class="personnel">
+
+            <div class="personnel-hex">
+
+                <div class="personnel-label">
+                    PERSONNEL FILE<br>
+                    ID // T0KAKU
+                </div>
+
+                <div class="personnel-id">
+                    CREATIVE DEVELOPER<br>
+                    STATUS // ACTIVE<br>
+                    SYNC // 100%
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- TECHNOLOGY -->
+
+        <div class="tech-matrix">
+
+            <div class="tech">
+                <small>01</small>
+                <strong>HTML</strong>
+            </div>
+
+            <div class="tech">
+                <small>02</small>
+                <strong>CSS</strong>
+            </div>
+
+            <div class="tech">
+                <small>03</small>
+                <strong>JAVASCRIPT</strong>
+            </div>
+
+            <div class="tech">
+                <small>04</small>
+                <strong>TYPESCRIPT</strong>
+            </div>
+
+            <div class="tech">
+                <small>05</small>
+                <strong>REACT</strong>
+            </div>
+
+            <div class="tech">
+                <small>06</small>
+                <strong>NEXT.JS</strong>
+            </div>
+
+            <div class="tech">
+                <small>07</small>
+                <strong>NODE.JS</strong>
+            </div>
+
+            <div class="tech">
+                <small>08</small>
+                <strong>PYTHON</strong>
+            </div>
+
+            <div class="tech">
+                <small>09</small>
+                <strong>GIT</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     CONTACT
+     ========================================================= -->
+
+<section
+    id="contact"
+    class="section contact"
+>
+
+    <div class="section-number">
+        COMMUNICATION 04 // OPEN CHANNEL
+    </div>
+
+
+    <div class="contact-ring"></div>
+
+
+    <div class="contact-content">
+
+        <div class="code">
+            ◆ EMERGENCY COMMUNICATION CHANNEL
+        </div>
+
+        <h2>
+            HAVE<br>
+            <span>AN</span><br>
+            IDEA?
+        </h2>
+
+        <p>
+            Have an idea, project or opportunity?
+            Establish a communication channel and
+            initiate transmission.
+        </p>
+
+        <a
+            href="mailto:T0kaku@proton.me"
+            class="transmission"
+        >
+            INITIATE TRANSMISSION
+            <strong>→</strong>
+        </a>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================================
+     FOOTER
+     ========================================================= -->
+
+<footer>
+
+    <span>
+        T0KAKU // SYSTEM INTERFACE // 2026
+    </span>
+
+    <div class="socials">
+
+        <a href="#">
+            GITHUB
+        </a>
+
+        <a href="#">
+            LINKEDIN
+        </a>
+
+        <a href="#">
+            X
+        </a>
+
+    </div>
+
+</footer>
+
+
+</main>
 
 </body>
 </html>
+```

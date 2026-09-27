@@ -1,45 +1,33 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>T0kaku // HEX SYSTEM</title>
+<title>GHOST // PORTFOLIO</title>
 
 <style>
-
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap');
-
-
-/* =========================================================
-   CORE
-========================================================= */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600&display=swap');
 
 :root {
-    --bg: #040207;
-    --bg2: #09050d;
+    --bg: #050708;
+    --panel: rgba(9, 15, 16, .72);
 
-    --purple: #8b35ff;
-    --purple-light: #c477ff;
-    --purple-dark: #42127a;
+    --green: #b8ff63;
+    --green-dim: #638d39;
 
-    --pink: #ed3dff;
+    --cyan: #72f7ff;
+    --cyan-dim: #376e72;
 
-    --white: #f5edff;
-    --grey: #776d80;
-    --dark: #241b2b;
+    --white: #e8f0e5;
+    --muted: #718078;
+    --red: #ff5f5f;
 
-    --danger: #ff3153;
+    --line: rgba(184, 255, 99, .17);
 
-    --line: rgba(164, 77, 255, .38);
-    --soft-line: rgba(164, 77, 255, .12);
+    --mono: "IBM Plex Mono", monospace;
+    --sans: "Space Grotesk", sans-serif;
 }
-
-
-/* =========================================================
-   RESET
-========================================================= */
 
 * {
     box-sizing: border-box;
@@ -54,2098 +42,1200 @@ html {
 body {
     background: var(--bg);
     color: var(--white);
-
-    font-family:
-        "Barlow Condensed",
-        Arial Narrow,
-        sans-serif;
-
+    font-family: var(--mono);
     overflow-x: hidden;
+    cursor: crosshair;
 }
 
-a {
-    color: inherit;
-    text-decoration: none;
-}
-
-
-/* =========================================================
-   CRT
-========================================================= */
+/* --------------------------------------------------
+   ATMOSPHERE
+-------------------------------------------------- */
 
 body::before {
     content: "";
-
     position: fixed;
     inset: 0;
-
     pointer-events: none;
-
-    z-index: 9999;
+    z-index: 999;
 
     background:
         repeating-linear-gradient(
             to bottom,
-            rgba(255,255,255,.025) 0,
-            rgba(255,255,255,.025) 1px,
+            rgba(255,255,255,.018) 0px,
+            rgba(255,255,255,.018) 1px,
             transparent 1px,
             transparent 4px
         );
 
-    opacity: .28;
+    mix-blend-mode: overlay;
 }
 
 body::after {
     content: "";
-
     position: fixed;
     inset: 0;
-
     pointer-events: none;
-
-    z-index: -10;
+    z-index: 998;
 
     background:
         radial-gradient(
-            circle at 50% 30%,
-            rgba(110,35,180,.08),
-            transparent 40%
+            circle at 50% 45%,
+            transparent 25%,
+            rgba(0,0,0,.42) 100%
         );
 }
 
+.noise {
+    position: fixed;
+    inset: -50%;
+    width: 200%;
+    height: 200%;
+    pointer-events: none;
+    z-index: 997;
+    opacity: .035;
 
-/* =========================================================
-   HEXAGON ENGINE
-========================================================= */
+    background-image:
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 
-.hex {
-    clip-path: polygon(
-        25% 0%,
-        75% 0%,
-        100% 50%,
-        75% 100%,
-        25% 100%,
-        0% 50%
-    );
+    animation: noise .18s steps(2) infinite;
 }
 
-.hex-outline {
+@keyframes noise {
+    0% { transform: translate(0,0); }
+    25% { transform: translate(2%, -1%); }
+    50% { transform: translate(-1%, 2%); }
+    75% { transform: translate(1%, 1%); }
+    100% { transform: translate(-2%, -2%); }
+}
+
+/* --------------------------------------------------
+   SYSTEM BAR
+-------------------------------------------------- */
+
+.system-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 34px;
+
+    z-index: 900;
+
+    border-bottom: 1px solid var(--line);
+
+    background: rgba(4,8,9,.82);
+    backdrop-filter: blur(12px);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 18px;
+
+    font-size: 10px;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+}
+
+.system-left,
+.system-right {
+    display: flex;
+    gap: 22px;
+    align-items: center;
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--green);
+    box-shadow: 0 0 10px var(--green);
+    display: inline-block;
+}
+
+.system-accent {
+    color: var(--green);
+}
+
+/* --------------------------------------------------
+   NAVIGATION
+-------------------------------------------------- */
+
+.nav {
+    position: fixed;
+    left: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    z-index: 800;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.nav button {
+    width: 42px;
+    height: 42px;
+
+    border: 1px solid var(--line);
+    background: rgba(5,9,10,.55);
+
+    color: var(--muted);
+
+    font-family: var(--mono);
+    font-size: 10px;
+
+    cursor: crosshair;
+
+    transition: .25s ease;
+}
+
+.nav button:hover,
+.nav button.active {
+    color: var(--green);
+    border-color: var(--green);
+    box-shadow:
+        inset 0 0 20px rgba(184,255,99,.08),
+        0 0 14px rgba(184,255,99,.08);
+}
+
+/* --------------------------------------------------
+   MAIN
+-------------------------------------------------- */
+
+main {
+    position: relative;
+    z-index: 10;
+}
+
+section {
+    min-height: 100vh;
+    position: relative;
+    padding: 110px 9vw;
+    border-bottom: 1px solid rgba(184,255,99,.08);
+}
+
+/* --------------------------------------------------
+   HERO
+-------------------------------------------------- */
+
+.hero {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    align-items: center;
+    gap: 8vw;
+
+    overflow: hidden;
+}
+
+.coordinate {
+    position: absolute;
+    color: rgba(184,255,99,.3);
+    font-size: 9px;
+    letter-spacing: .2em;
+}
+
+.coord-a { top: 70px; left: 9vw; }
+.coord-b { bottom: 50px; right: 9vw; }
+
+.hero-main {
+    position: relative;
+}
+
+.micro {
+    font-size: 10px;
+    color: var(--green);
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    margin-bottom: 25px;
+}
+
+.hero h1 {
+    font-family: var(--sans);
+    font-weight: 300;
+    font-size: clamp(70px, 12vw, 190px);
+    line-height: .75;
+    letter-spacing: -.075em;
+    color: var(--white);
+
+    position: relative;
+}
+
+.hero h1 span {
+    display: block;
+}
+
+.hero h1 .ghost {
+    color: transparent;
+    -webkit-text-stroke: 1px var(--green);
+}
+
+.hero-sub {
+    margin-top: 45px;
+    max-width: 590px;
+
+    font-size: 13px;
+    line-height: 1.9;
+    color: #93a199;
+}
+
+.hero-sub strong {
+    color: var(--green);
+    font-weight: 400;
+}
+
+/* --------------------------------------------------
+   CYBERBRAIN VISUAL
+-------------------------------------------------- */
+
+.brain {
+    height: 360px;
     position: relative;
 
-    clip-path: polygon(
-        25% 0%,
-        75% 0%,
-        100% 50%,
-        75% 100%,
-        25% 100%,
-        0% 50%
-    );
+    border: 1px solid var(--line);
 
-    background: var(--line);
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(114,247,255,.12),
+            transparent 55%
+        ),
+        linear-gradient(
+            135deg,
+            rgba(184,255,99,.025),
+            transparent
+        );
+
+    display: grid;
+    place-items: center;
 }
 
-.hex-outline::after {
+.brain::before,
+.brain::after {
+    content: "";
+    position: absolute;
+    inset: 22px;
+    border: 1px solid rgba(114,247,255,.15);
+}
+
+.brain::after {
+    inset: 48px;
+    border-color: rgba(184,255,99,.12);
+}
+
+.brain-core {
+    width: 120px;
+    height: 120px;
+
+    border: 1px solid var(--cyan);
+
+    transform: rotate(45deg);
+
+    box-shadow:
+        0 0 25px rgba(114,247,255,.14),
+        inset 0 0 30px rgba(114,247,255,.08);
+
+    position: relative;
+}
+
+.brain-core::before,
+.brain-core::after {
+    content: "";
+    position: absolute;
+    inset: 20px;
+    border: 1px solid var(--green);
+}
+
+.brain-core::after {
+    inset: 39px;
+    background: var(--green);
+    box-shadow: 0 0 35px var(--green);
+}
+
+.orbit {
+    position: absolute;
+    width: 280px;
+    height: 150px;
+    border: 1px solid rgba(114,247,255,.2);
+    border-radius: 50%;
+    transform: rotate(-25deg);
+    animation: orbit 8s linear infinite;
+}
+
+@keyframes orbit {
+    to { transform: rotate(335deg); }
+}
+
+.brain-label {
+    position: absolute;
+    font-size: 8px;
+    color: var(--cyan);
+    letter-spacing: .12em;
+}
+
+.label-one { top: 18px; left: 18px; }
+.label-two { bottom: 18px; right: 18px; }
+.label-three { top: 50%; right: -1px; transform: translateX(100%); }
+
+/* --------------------------------------------------
+   SECTION HEADERS
+-------------------------------------------------- */
+
+.section-index {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+
+    color: var(--green);
+    font-size: 10px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+
+    margin-bottom: 30px;
+}
+
+.section-index::after {
+    content: "";
+    width: 100px;
+    height: 1px;
+    background: var(--green);
+    opacity: .4;
+}
+
+.section-title {
+    font-family: var(--sans);
+    font-size: clamp(42px, 6vw, 90px);
+    font-weight: 300;
+    letter-spacing: -.06em;
+    line-height: .9;
+}
+
+/* --------------------------------------------------
+   PROJECTS
+-------------------------------------------------- */
+
+.projects-section {
+    background:
+        linear-gradient(
+            90deg,
+            transparent 49.9%,
+            rgba(184,255,99,.05) 50%,
+            transparent 50.1%
+        );
+}
+
+.project-interface {
+    margin-top: 80px;
+
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    min-height: 480px;
+
+    border: 1px solid var(--line);
+}
+
+.project-list {
+    border-right: 1px solid var(--line);
+}
+
+.project-item {
+    position: relative;
+
+    padding: 22px;
+    border-bottom: 1px solid rgba(184,255,99,.08);
+
+    cursor: crosshair;
+
+    transition: .2s ease;
+}
+
+.project-item:hover,
+.project-item.active {
+    background: rgba(184,255,99,.05);
+}
+
+.project-item.active::before {
     content: "";
 
     position: absolute;
-
-    inset: 1px;
-
-    background: var(--bg2);
-
-    clip-path: inherit;
-}
-
-
-/* =========================================================
-   HEX GRID BACKGROUND
-========================================================= */
-
-.hex-background {
-    position: fixed;
-
-    inset: -100px;
-
-    z-index: -5;
-
-    opacity: .25;
-
-    pointer-events: none;
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(18, 70px);
-
-    grid-auto-rows: 61px;
-
-    transform:
-        rotate(-2deg)
-        scale(1.1);
-}
-
-.hex-background span {
-    width: 68px;
-    height: 78px;
-
-    border: 1px solid var(--soft-line);
-
-    clip-path: polygon(
-        25% 0,
-        75% 0,
-        100% 50%,
-        75% 100%,
-        25% 100%,
-        0 50%
-    );
-}
-
-.hex-background span:nth-child(even) {
-    transform: translateY(30px);
-}
-
-
-/* =========================================================
-   LEFT COMMAND SPINE
-========================================================= */
-
-.spine {
-    position: fixed;
-
     left: 0;
     top: 0;
     bottom: 0;
 
-    width: 70px;
+    width: 2px;
 
-    z-index: 500;
-
-    border-right: 1px solid var(--line);
-
-    background: rgba(4,2,7,.94);
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    padding-top: 15px;
+    background: var(--green);
+    box-shadow: 0 0 15px var(--green);
 }
 
-.spine-logo {
-    width: 42px;
-    height: 48px;
-
-    background: var(--purple);
-
-    display: grid;
-
-    place-items: center;
-
-    font-family: "Space Mono";
-
-    font-size: 10px;
-
-    clip-path: polygon(
-        25% 0,
-        75% 0,
-        100% 50%,
-        75% 100%,
-        25% 100%,
-        0 50%
-    );
-
-    box-shadow:
-        0 0 30px rgba(139,53,255,.45);
+.project-number {
+    font-size: 9px;
+    color: var(--muted);
 }
 
-.spine-line {
-    width: 1px;
-
-    height: 80px;
-
-    margin: 15px 0;
-
-    background:
-        linear-gradient(
-            var(--purple),
-            transparent
-        );
+.project-name {
+    margin-top: 8px;
+    font-family: var(--sans);
+    font-size: 18px;
+    font-weight: 400;
 }
 
-.spine-nav {
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 5px;
-
-    width: 100%;
+.project-type {
+    margin-top: 5px;
+    font-size: 8px;
+    color: var(--green-dim);
 }
 
-.spine-nav a {
-    height: 90px;
-
-    writing-mode: vertical-rl;
-
-    transform: rotate(180deg);
-
-    display: grid;
-
-    place-items: center;
-
-    font-family: "Space Mono";
-
-    font-size: 7px;
-
-    letter-spacing: 2px;
-
-    color: var(--grey);
+.project-view {
+    position: relative;
+    padding: 45px;
+    overflow: hidden;
 }
 
-.spine-nav a:hover {
-    color: var(--purple-light);
+.project-view::before {
+    content: "VISUALIZATION / ACTIVE";
+    position: absolute;
+    top: 18px;
+    right: 20px;
+
+    color: var(--green);
+    font-size: 8px;
+    letter-spacing: .2em;
+}
+
+.project-visual {
+    height: 270px;
+
+    border: 1px solid rgba(114,247,255,.2);
+
+    position: relative;
+
+    overflow: hidden;
 
     background:
         linear-gradient(
             90deg,
-            transparent,
-            rgba(139,53,255,.16)
-        );
-}
-
-.spine-bottom {
-    margin-top: auto;
-
-    writing-mode: vertical-rl;
-
-    color: var(--dark);
-
-    font-family: "Space Mono";
-
-    font-size: 6px;
-
-    letter-spacing: 3px;
-
-    margin-bottom: 20px;
-}
-
-
-/* =========================================================
-   MAIN
-========================================================= */
-
-main {
-    margin-left: 70px;
-}
-
-
-/* =========================================================
-   TOP BAR
-========================================================= */
-
-.topbar {
-    height: 34px;
-
-    border-bottom: 1px solid var(--line);
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    padding: 0 25px;
-
-    font-family: "Space Mono";
-
-    font-size: 7px;
-
-    color: var(--grey);
-
-    letter-spacing: 1px;
-}
-
-.topbar strong {
-    color: var(--purple-light);
-}
-
-.online::before {
-    content: "";
-
-    width: 5px;
-    height: 5px;
-
-    display: inline-block;
-
-    background: var(--purple);
-
-    border-radius: 50%;
-
-    margin-right: 6px;
-
-    box-shadow:
-        0 0 12px var(--purple);
-}
-
-
-/* =========================================================
-   HERO HEX FIELD
-========================================================= */
-
-.hero {
-    min-height: 100vh;
-
-    position: relative;
-
-    overflow: hidden;
-
-    border-bottom: 1px solid var(--line);
-}
-
-
-/* GIANT HEX */
-
-.hero-hex {
-    position: absolute;
-
-    width: 780px;
-    height: 900px;
-
-    right: -120px;
-    top: -100px;
-
-    background:
+            transparent 49%,
+            rgba(114,247,255,.12) 50%,
+            transparent 51%
+        ),
         linear-gradient(
-            145deg,
-            rgba(139,53,255,.18),
-            rgba(20,5,30,.04)
+            transparent 49%,
+            rgba(114,247,255,.12) 50%,
+            transparent 51%
         );
 
-    clip-path: polygon(
-        25% 0,
-        75% 0,
-        100% 50%,
-        75% 100%,
-        25% 100%,
-        0 50%
-    );
-
-    opacity: .75;
+    background-size: 50px 50px;
 }
 
-.hero-hex::before {
+.project-visual::after {
     content: "";
 
     position: absolute;
+    width: 150%;
+    height: 1px;
+    background: var(--green);
 
-    inset: 25px;
+    top: 50%;
+    left: -25%;
 
-    border: 1px solid var(--line);
+    box-shadow: 0 0 20px var(--green);
 
-    clip-path: inherit;
+    animation: scan 3s linear infinite;
 }
 
-
-/* TITLE */
-
-.hero-content {
-    position: relative;
-
-    z-index: 5;
-
-    padding:
-        17vh
-        7vw
-        10vh;
+@keyframes scan {
+    from { transform: translateY(-130px); }
+    to { transform: translateY(130px); }
 }
 
-.kicker {
-    font-family: "Space Mono";
-
-    font-size: 8px;
-
-    color: var(--purple-light);
-
-    letter-spacing: 4px;
-
-    margin-bottom: 25px;
-}
-
-.hero-title {
-    font-size: clamp(110px, 20vw, 310px);
-
-    font-weight: 900;
-
-    line-height: .6;
-
-    letter-spacing: -12px;
-
-    text-transform: uppercase;
-}
-
-.hero-title span {
-    display: block;
-
-    color: transparent;
-
-    -webkit-text-stroke:
-        1px var(--purple-light);
-
-    transform: translateX(90px);
-}
-
-.hero-description {
-    margin-top: 65px;
-
-    width: 410px;
-
-    border-left: 2px solid var(--purple);
-
-    padding-left: 15px;
-
-    font-family: "Space Mono";
-
-    font-size: 9px;
-
-    line-height: 2;
-
-    color: var(--grey);
-}
-
-
-/* =========================================================
-   CENTRAL HEX CORE
-========================================================= */
-
-.hero-core {
+.visual-shape {
     position: absolute;
-
-    right: 11vw;
-    top: 25%;
-
-    width: 380px;
-    height: 440px;
-
-    z-index: 8;
-
-    display: grid;
-
-    place-items: center;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(139,53,255,.08),
-            transparent
-        );
-
-    clip-path: polygon(
-        25% 0,
-        75% 0,
-        100% 50%,
-        75% 100%,
-        25% 100%,
-        0 50%
-    );
-}
-
-.hero-core::before {
-    content: "";
-
-    position: absolute;
-
-    inset: 15px;
-
-    background:
-        repeating-linear-gradient(
-            60deg,
-            transparent 0,
-            transparent 20px,
-            rgba(139,53,255,.08) 21px,
-            transparent 22px
-        );
-
-    clip-path: inherit;
-}
-
-.core-inner {
-    width: 175px;
-    height: 202px;
-
-    background:
-        radial-gradient(
-            circle,
-            var(--purple-light),
-            var(--purple) 28%,
-            var(--purple-dark) 55%,
-            transparent 70%
-        );
-
-    clip-path: polygon(
-        25% 0,
-        75% 0,
-        100% 50%,
-        75% 100%,
-        25% 100%,
-        0 50%
-    );
-
-    filter:
-        drop-shadow(0 0 35px var(--purple));
-
-    animation:
-        corePulse 2.8s infinite;
-}
-
-.core-data {
-    position: absolute;
-
-    right: 20px;
-    bottom: 40px;
-
-    font-family: "Space Mono";
-
-    font-size: 7px;
-
-    color: var(--grey);
-
-    text-align: right;
-
-    line-height: 1.8;
-}
-
-.core-data strong {
-    color: var(--purple-light);
-}
-
-
-/* =========================================================
-   HERO HEX NODES
-========================================================= */
-
-.hero-node {
-    position: absolute;
-
-    width: 100px;
-    height: 115px;
-
-    background: rgba(139,53,255,.08);
-
-    border: 1px solid var(--line);
-
-    clip-path: polygon(
-        25% 0,
-        75% 0,
-        100% 50%,
-        75% 100%,
-        25% 100%,
-        0 50%
-    );
-
-    display: grid;
-
-    place-items: center;
-
-    font-family: "Space Mono";
-
-    font-size: 6px;
-
-    color: var(--grey);
-
-    text-align: center;
-}
-
-.hero-node b {
-    display: block;
-
-    color: var(--purple-light);
-
-    font-size: 8px;
-}
-
-.hero-node.one {
-    left: 9%;
-    bottom: 15%;
-}
-
-.hero-node.two {
-    left: 20%;
-    bottom: 8%;
-}
-
-.hero-node.three {
-    right: 32%;
-    bottom: 9%;
-}
-
-
-/* =========================================================
-   SECTION
-========================================================= */
-
-.section {
-    position: relative;
-
-    padding:
-        150px
-        7vw;
-
-    border-bottom: 1px solid var(--line);
-
-    overflow: hidden;
-}
-
-.section-code {
-    font-family: "Space Mono";
-
-    font-size: 8px;
-
-    color: var(--purple-light);
-
-    letter-spacing: 4px;
-
-    margin-bottom: 25px;
-}
-
-.section-title {
-    font-size: clamp(100px, 16vw, 240px);
-
-    font-weight: 900;
-
-    line-height: .55;
-
-    letter-spacing: -10px;
-
-    text-transform: uppercase;
-
-    margin-bottom: 100px;
-}
-
-.section-title span {
-    color: transparent;
-
-    -webkit-text-stroke:
-        1px var(--line);
-}
-
-
-/* =========================================================
-   PROJECT HEX SYSTEM
-========================================================= */
-
-.project-system {
-    position: relative;
-
-    min-height: 1250px;
-
-    width: 100%;
-}
-
-
-/* CENTRAL CORE */
-
-.project-core {
-    position: absolute;
-
-    left: 50%;
-    top: 45%;
-
-    transform:
-        translate(-50%, -50%);
-
-    width: 310px;
-    height: 358px;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(139,53,255,.35),
-            rgba(139,53,255,.05) 55%,
-            transparent 70%
-        );
-
-    clip-path: polygon(
-        25% 0,
-        75% 0,
-        100% 50%,
-        75% 100%,
-        25% 100%,
-        0 50%
-    );
-
-    border: 1px solid var(--line);
-}
-
-.project-core::after {
-    content: "PROJECT CORE";
-
-    position: absolute;
-
-    inset: 0;
-
-    display: grid;
-
-    place-items: center;
-
-    font-family: "Space Mono";
-
-    font-size: 8px;
-
-    letter-spacing: 3px;
-
-    color: var(--purple-light);
-}
-
-
-/* =========================================================
-   PROJECT HEX
-========================================================= */
-
-.project {
-    position: absolute;
-
-    width: 420px;
-    height: 485px;
-
-    padding: 50px 48px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(18,8,25,.98),
-            rgba(6,3,9,.98)
-        );
-
-    clip-path: polygon(
-        25% 0,
-        75% 0,
-        100% 50%,
-        75% 100%,
-        25% 100%,
-        0 50%
-    );
-
-    transition:
-        transform .4s,
-        filter .4s;
-}
-
-.project::before {
-    content: "";
-
-    position: absolute;
-
-    inset: 5px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(139,53,255,.08),
-            transparent 60%
-        );
-
-    clip-path: inherit;
-
-    z-index: -1;
-}
-
-.project:hover {
-    transform:
-        scale(1.045)
-        rotate(-1deg);
-
-    filter:
-        drop-shadow(
-            0 0 25px
-            rgba(139,53,255,.35)
-        );
-}
-
-
-/* PROJECT POSITIONS */
-
-.project-1 {
-    left: 0;
-    top: 0;
-}
-
-.project-2 {
-    right: 2%;
-    top: 150px;
-}
-
-.project-3 {
-    left: 15%;
-    top: 630px;
-}
-
-.project-4 {
-    right: 9%;
-    top: 730px;
-}
-
-
-/* PROJECT CONTENT */
-
-.project-number {
-    font-family: "Space Mono";
-
-    color: var(--purple-light);
-
-    font-size: 7px;
-
-    letter-spacing: 2px;
-
-    margin-bottom: 45px;
-}
-
-.project h3 {
-    font-size: 62px;
-
-    text-transform: uppercase;
-
-    line-height: .72;
-
-    font-weight: 900;
-
-    margin-bottom: 25px;
-}
-
-.project p {
-    font-family: "Space Mono";
-
-    font-size: 8px;
-
-    line-height: 1.9;
-
-    color: var(--grey);
-
-    margin-bottom: 25px;
-}
-
-.project-image {
-    width: 190px;
-    height: 120px;
-
-    margin-bottom: 22px;
-
-    overflow: hidden;
-
-    clip-path: polygon(
-        25% 0,
-        75% 0,
-        100% 50%,
-        75% 100%,
-        25% 100%,
-        0 50%
-    );
-
-    border: 1px solid var(--line);
-}
-
-.project-image img {
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-
-    opacity: .7;
-}
-
-.project-tags {
-    display: flex;
-
-    flex-wrap: wrap;
-
-    gap: 5px;
-
-    margin-bottom: 20px;
-}
-
-.project-tags span {
-    font-family: "Space Mono";
-
-    font-size: 6px;
-
-    color: var(--purple-light);
-
-    border: 1px solid var(--line);
-
-    padding: 5px 8px;
-
-    clip-path: polygon(
-        15% 0,
-        85% 0,
-        100% 50%,
-        85% 100%,
-        15% 100%,
-        0 50%
-    );
-}
-
-.project-links {
-    display: flex;
-
-    gap: 20px;
-}
-
-.project-links a {
-    font-family: "Space Mono";
-
-    font-size: 7px;
-
-    border-bottom: 1px solid var(--purple);
-
-    padding-bottom: 3px;
-}
-
-
-/* =========================================================
-   MINI HEX DATA CLOUD
-========================================================= */
-
-.data-cloud {
-    position: absolute;
-
-    display: flex;
-
-    gap: 5px;
-
-    opacity: .7;
-}
-
-.data-cloud span {
-    width: 38px;
-    height: 44px;
-
-    border: 1px solid var(--line);
-
-    clip-path: polygon(
-        25% 0,
-        75% 0,
-        100% 50%,
-        75% 100%,
-        25% 100%,
-        0 50%
-    );
-}
-
-.cloud-one {
-    right: 5%;
-    top: 20px;
-}
-
-.cloud-two {
-    left: 3%;
-    bottom: 60px;
-}
-
-
-/* =========================================================
-   ABOUT
-========================================================= */
-
-.about-system {
-    min-height: 900px;
-
-    position: relative;
-
-    display: grid;
-
-    grid-template-columns: 1fr 1fr;
-
-    gap: 80px;
-}
-
-
-/* ABOUT TEXT */
-
-.about-text {
-    padding-top: 30px;
-}
-
-.about-text h3 {
-    font-size: clamp(90px, 13vw, 190px);
-
-    line-height: .55;
-
-    font-weight: 900;
-
-    text-transform: uppercase;
-
-    letter-spacing: -8px;
-
-    margin-bottom: 70px;
-}
-
-.about-text h3 span {
-    color: transparent;
-
-    -webkit-text-stroke:
-        1px var(--purple-light);
-}
-
-.about-text p {
-    max-width: 470px;
-
-    font-family: "Space Mono";
-
-    font-size: 9px;
-
-    color: var(--grey);
-
-    line-height: 2.1;
-
-    margin-bottom: 20px;
-}er kutter filer / 3D fil
-
-
-/* PERSONNEL HEX */
-
-.personnel-core {
-    display: grid;
-
-    place-items: center;
-}
-
-.personnel-hex {
-    width: 430px;
-    height: 495px;
-
-    position: relative;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(139,53,255,.18),
-            rgba(5,2,8,.9)
-        );
-
-    clip-path: polygon(
-        25% 0,
-        75% 0,
-        100% 50%,
-        75% 100%,
-        25% 100%,
-        0 50%
-    );
-
-    filter:
-        drop-shadow(
-            0 0 20px
-            rgba(139,53,255,.12)
-        );
-}
-
-.personnel-hex::before {
-    content: "";
-
-    position: absolute;
-
-    inset: 18px;
-
-    border: 1px solid var(--line);
-
-    clip-path: inherit;
-}
-
-.personnel-id {
-    position: absolute;
-
-    top: 55px;
-    left: 60px;
-
-    font-family: "Space Mono";
-
-    font-size: 7px;
-
-    color: var(--purple-light);
-
-    line-height: 2;
-}
-
-.personnel-name {
-    position: absolute;
-
     left: 50%;
     top: 50%;
 
+    width: 150px;
+    height: 150px;
+
+    border: 1px solid var(--green);
+
     transform:
-        translate(-50%, -50%);
+        translate(-50%, -50%)
+        rotate(45deg);
 
-    font-size: 140px;
-
-    font-weight: 900;
-
-    color: rgba(139,53,255,.12);
+    box-shadow:
+        0 0 50px rgba(184,255,99,.12),
+        inset 0 0 40px rgba(184,255,99,.05);
 }
 
-.personnel-status {
+.visual-shape::before {
+    content: "";
+
     position: absolute;
+    inset: 28px;
 
-    bottom: 55px;
-    right: 60px;
+    border: 1px solid var(--cyan);
+}
 
-    font-family: "Space Mono";
+.project-meta {
+    display: flex;
+    justify-content: space-between;
 
-    font-size: 7px;
+    margin-top: 25px;
 
-    color: var(--grey);
+    font-size: 10px;
+    color: var(--muted);
+}
 
-    text-align: right;
+.project-meta span {
+    color: var(--green);
+}
 
+/* --------------------------------------------------
+   ABOUT / PROFILE
+-------------------------------------------------- */
+
+.profile-grid {
+    margin-top: 80px;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    gap: 1px;
+
+    background: var(--line);
+
+    border: 1px solid var(--line);
+}
+
+.profile-cell {
+    min-height: 180px;
+
+    padding: 30px;
+
+    background: var(--bg);
+
+    position: relative;
+}
+
+.profile-cell::before {
+    content: attr(data-index);
+
+    position: absolute;
+    top: 15px;
+    right: 18px;
+
+    font-size: 8px;
+    color: var(--green-dim);
+}
+
+.profile-label {
+    color: var(--green);
+    font-size: 9px;
+    letter-spacing: .18em;
+    margin-bottom: 20px;
+}
+
+.profile-value {
+    font-family: var(--sans);
+    font-size: 25px;
+    font-weight: 300;
+}
+
+.profile-description {
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.8;
+    max-width: 450px;
+}
+
+/* --------------------------------------------------
+   SKILLS
+-------------------------------------------------- */
+
+.skills-layout {
+    margin-top: 80px;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+}
+
+.skill {
+    margin-bottom: 30px;
+}
+
+.skill-header {
+    display: flex;
+    justify-content: space-between;
+
+    font-size: 10px;
+    margin-bottom: 10px;
+}
+
+.skill-header span:first-child {
+    color: var(--white);
+}
+
+.skill-header span:last-child {
+    color: var(--green);
+}
+
+.skill-bar {
+    height: 2px;
+    background: rgba(184,255,99,.1);
+}
+
+.skill-fill {
+    height: 100%;
+    background: var(--green);
+
+    box-shadow: 0 0 12px var(--green);
+
+    transform-origin: left;
+    animation: load 1.5s ease forwards;
+}
+
+@keyframes load {
+    from { transform: scaleX(0); }
+}
+
+.data-block {
+    border-left: 1px solid var(--cyan);
+    padding-left: 25px;
+
+    color: var(--muted);
+    font-size: 11px;
     line-height: 2;
 }
 
-.personnel-status strong {
-    color: var(--purple-light);
-}
-
-
-/* =========================================================
-   TECHNOLOGY HEX ROW
-========================================================= */
-
-.technology {
-    margin-top: 120px;
-
-    display: flex;
-
-    justify-content: center;
-
-    flex-wrap: wrap;
-
-    max-width: 900px;
-
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.tech {
-    width: 130px;
-    height: 150px;
-
-    margin: -8px;
-
-    background:
-        rgba(139,53,255,.055);
-
-    clip-path: polygon(
-        25% 0,
-        75% 0,
-        100% 50%,
-        75% 100%,
-        25% 100%,
-        0 50%
-    );
-
-    display: flex;
-
-    flex-direction: column;
-
-    justify-content: center;
-
-    align-items: center;
-
-    border: 1px solid var(--line);
-
-    transition: .25s;
-}
-
-.tech:hover {
-    background:
-        rgba(139,53,255,.2);
-
-    transform:
-        scale(1.08);
-
-    z-index: 10;
-}
-
-.tech small {
-    font-family: "Space Mono";
-
-    color: var(--dark);
-
-    font-size: 6px;
-
-    margin-bottom: 15px;
-}
-
-.tech strong {
-    font-family: "Space Mono";
-
-    font-size: 8px;
-
-    color: var(--purple-light);
-}
-
-
-/* =========================================================
-   CONTACT HEX
-========================================================= */
+/* --------------------------------------------------
+   CONTACT
+-------------------------------------------------- */
 
 .contact {
-    min-height: 100vh;
-
-    position: relative;
-
     display: grid;
-
     place-items: center;
-
-    overflow: hidden;
-}
-
-.contact-hex {
-    width: 850px;
-    height: 980px;
-
-    position: absolute;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(139,53,255,.11),
-            transparent 65%
-        );
-
-    clip-path: polygon(
-        25% 0,
-        75% 0,
-        100% 50%,
-        75% 100%,
-        25% 100%,
-        0 50%
-    );
-}
-
-.contact-inner {
-    position: relative;
-
-    z-index: 5;
-
     text-align: center;
 }
 
-.contact-code {
-    font-family: "Space Mono";
-
-    color: var(--danger);
-
-    font-size: 8px;
-
-    letter-spacing: 4px;
-
-    margin-bottom: 35px;
+.contact .section-index {
+    justify-content: center;
 }
 
 .contact h2 {
-    font-size: clamp(110px, 18vw, 280px);
-
-    line-height: .55;
-
-    font-weight: 900;
-
-    letter-spacing: -12px;
-
-    text-transform: uppercase;
+    font-family: var(--sans);
+    font-size: clamp(55px, 9vw, 130px);
+    font-weight: 300;
+    letter-spacing: -.07em;
 }
 
-.contact h2 span {er kutter filer / 3D fil
+.contact h2 span {
     color: transparent;
-
-    -webkit-text-stroke:
-        1px var(--purple-light);
+    -webkit-text-stroke: 1px var(--green);
 }
 
-.contact-text {
-    max-width: 450px;
+.contact-copy {
+    max-width: 500px;
+    margin: 30px auto;
 
-    margin: 60px auto 30px;
-
-    font-family: "Space Mono";
-
-    color: var(--grey);
-
-    font-size: 9px;
-
-    line-height: 2;
+    color: var(--muted);
+    line-height: 1.9;
+    font-size: 11px;
 }
 
-.contact-button {
-    display: inline-flex;
+.contact-link {
+    display: inline-block;
 
-    padding: 15px 28px;
+    padding: 16px 28px;
 
-    border: 1px solid var(--purple);
+    border: 1px solid var(--green);
 
-    background:
-        rgba(139,53,255,.08);
+    color: var(--green);
+    text-decoration: none;
 
-    font-family: "Space Mono";
+    font-size: 10px;
+    letter-spacing: .15em;
+
+    transition: .25s ease;
+}
+
+.contact-link:hover {
+    color: var(--bg);
+    background: var(--green);
+    box-shadow: 0 0 35px rgba(184,255,99,.25);
+}
+
+/* --------------------------------------------------
+   FLOATING DATA
+-------------------------------------------------- */
+
+.data-corner {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+
+    z-index: 700;
 
     font-size: 8px;
+    color: var(--green-dim);
 
-    letter-spacing: 2px;
+    line-height: 1.8;
+    text-align: right;
 
-    transition: .2s;
+    pointer-events: none;
 }
 
-.contact-button:hover {
-    background: var(--purple);
+/* --------------------------------------------------
+   RESPONSIVE
+-------------------------------------------------- */
 
-    box-shadow:
-        0 0 35px
-        rgba(139,53,255,.4);
-}
+@media (max-width: 900px) {
 
-
-/* =========================================================
-   FOOTER
-========================================================= */
-
-footer {
-    border-top: 1px solid var(--line);
-
-    min-height: 100px;
-
-    padding: 30px 7vw;
-
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    font-family: "Space Mono";
-
-    font-size: 7px;
-
-    color: var(--grey);
-}
-
-.socials {
-    display: flex;
-
-    gap: 25px;
-}
-
-.socials a:hover {
-    color: var(--purple-light);
-}
-
-
-/* =========================================================
-   ANIMATION
-========================================================= */
-
-@keyframes corePulse {
-
-    0%,
-    100% {
-        transform: scale(.94);
-        opacity: .75;
-    }
-
-    50% {
-        transform: scale(1.06);
-        opacity: 1;
-    }
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media(max-width: 1000px) {
-
-    .spine {
+    .system-right {
         display: none;
     }
 
-    main {
-        margin-left: 0;
-    }
-
-    .hero-core {
-        right: -80px;
-        opacity: .55;
-    }
-
-    .project-system {
-        min-height: auto;
-
-        display: flex;
-
-        flex-direction: column;
-
-        align-items: center;
-
-        gap: 25px;
-    }
-
-    .project,
-    .project-1,
-    .project-2,
-    .project-3,
-    .project-4 {
-        position: relative;
-
+    .nav {
         left: auto;
-        right: auto;
+        right: 12px;
         top: auto;
+        bottom: 15px;
+        transform: none;
 
-        width: min(420px, 95vw);
-
-        flex-shrink: 0;
-    }
-
-    .project-core {
-        display: none;
-    }
-
-    .data-cloud {
-        display: none;
-    }
-
-    .about-system {
-        grid-template-columns: 1fr;
-    }
-
-    .technology {
-        margin-top: 50px;
-    }
-}
-
-
-@media(max-width: 600px) {
-
-    .topbar span:last-child {
-        display: none;
+        flex-direction: row;
     }
 
     .hero {
-        min-height: 850px;
+        grid-template-columns: 1fr;
     }
 
-    .hero-content {
-        padding:
-            100px
-            25px
-            50px;
+    .brain {
+        max-width: 400px;
     }
 
-    .hero-title {
-        font-size: 95px;er kutter filer / 3D fil
-
-        letter-spacing: -5px;
+    .project-interface {
+        grid-template-columns: 1fr;
     }
 
-    .hero-title span {
-        transform: translateX(25px);
+    .project-list {
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+
+        display: flex;
+        overflow-x: auto;
     }
 
-    .hero-description {
-        width: 280px;
-
-        margin-top: 45px;
+    .project-item {
+        min-width: 170px;
     }
 
-    .hero-core {
-        width: 280px;
-        height: 323px;
-
-        right: -70px;
-        top: 470px;
-    }
-
-    .core-inner {
-        width: 115px;
-        height: 132px;
-    }
-
-    .section {
-        padding:
-            100px
-            20px;
-    }
-
-    .section-title {
-        font-size: 85px;
-
-        letter-spacing: -5px;
-
-        margin-bottom: 60px;
-    }
-
-    .project {
-        width: 350px;
-        height: 404px;
-
-        padding: 45px 40px;
-    }
-
-    .project h3 {
-        font-size: 48px;
-    }
-
-    .project-image {
-        width: 150px;
-        height: 90px;
-    }
-
-    .personnel-hex {
-        width: 320px;
-        height: 370px;
-    }
-
-    .personnel-name {
-        font-size: 105px;
-    }
-
-    .tech {
-        width: 105px;
-        height: 120px;
-    }
-
-    .contact h2 {
-        font-size: 90px;
-
-        letter-spacing: -6px;
-    }
-
-    footer {
-        flex-direction: column;
-
-        align-items: flex-start;
-
-        gap: 20px;
+    .skills-layout,
+    .profile-grid {
+        grid-template-columns: 1fr;
     }
 }
 
+@media (max-width: 600px) {
+
+    section {
+        padding: 90px 25px;
+    }
+
+    .hero h1 {
+        font-size: 65px;
+    }
+
+    .project-view {
+        padding: 25px;
+    }
+
+    .project-visual {
+        height: 210px;
+    }
+
+    .data-corner {
+        display: none;
+    }
+}
 </style>
 </head>
 
-er kutter filer / 3D fil
 <body>
 
+<div class="noise"></div>
 
-<!-- =========================================================
-     BACKGROUND HEX FIELD
-========================================================= -->
+<!-- SYSTEM STATUS -->
 
-<div class="hex-background">
+<header class="system-bar">
 
-    <span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span>
+    <div class="system-left">
+        <span>
+            <i class="status-dot"></i>
+            SYSTEM ONLINE
+        </span>
 
-</div>
+        <span>
+            NODE <span class="system-accent">07</span>
+        </span>
 
-
-<!-- =========================================================
-     COMMAND SPINE
-========================================================= -->
-
-<aside class="spine">
-
-    <div class="spine-logo">
-        T0
+        <span>
+            MEMORY <span class="system-accent">94.7%</span>
+        </span>
     </div>
 
-    <div class="spine-line"></div>
-
-    <nav class="spine-nav">
-
-        <a href="#">
-            SYSTEM
-        </a>
-
-        <a href="#projects">
-            TARGETS
-        </a>
-
-        <a href="#about">
-            PERSONNEL
-        </a>
-
-        <a href="#contact">
-            CHANNEL
-        </a>
-
-    </nav>
-
-    <div class="spine-bottom">
-        HEX SYSTEM // ACTIVE
+    <div class="system-right">
+        <span id="clock">00:00:00</span>
+        <span>SECURE CONNECTION</span>
+        <span class="system-accent">GHOST_OS</span>
     </div>
 
-</aside>
+</header>
+
+
+<!-- SIDE NAV -->
+
+<nav class="nav">
+
+    <button class="active" data-target="home">00</button>
+    <button data-target="projects">01</button>
+    <button data-target="about">02</button>
+    <button data-target="skills">03</button>
+    <button data-target="contact">04</button>
+
+</nav>
 
 
 <main>
 
+<!-- ==================================================
+     HOME
+================================================== -->
 
-<!-- =========================================================
-     TOP BAR
-========================================================= -->
+<section class="hero" id="home">
 
-<div class="topbar">
-
-    <span class="online">
-        SYSTEM ONLINE
+    <span class="coordinate coord-a">
+        35.6895° N / 139.6917° E
     </span>
 
-    <span>
-        T0KAKU // HEX INTERFACE
+    <span class="coordinate coord-b">
+        SIGNAL: 98.2 / LATENCY: 04ms
     </span>
 
-    <span>
-        BUILD <strong>2026.01</strong>
-    </span>
+    <div class="hero-main">
 
-</div>
-
-
-<!-- =========================================================
-     HERO
-========================================================= -->
-
-<section class="hero">
-
-    <div class="hero-hex"></div>
-
-    <div class="hero-content">
-
-        <div class="kicker">
-            CREATIVE PERSONNEL // IDENTIFICATION 001
+        <div class="micro">
+            [ IDENTITY FOUND ]
         </div>
 
-        <h1 class="hero-title">
-            T0
-            <span>KAKU</span>
+        <h1>
+            <span>YOUR</span>
+            <span class="ghost">NAME</span>
         </h1>
 
-        <p class="hero-description">
-
-            I'm a developer and creator focused on building
-            clean, useful and thoughtful digital experiences.
-
+        <p class="hero-sub">
+            DIGITAL DESIGNER / CREATIVE DEVELOPER / SYSTEM ARCHITECT
             <br><br>
 
-            SYSTEM NOTE //
-            THIS INTERFACE WAS NOT DESIGNED
-            FOR NORMAL EXPECTATIONS.
-
+            I construct <strong>interfaces</strong>, visual systems,
+            identities and digital environments where technology
+            becomes part of the experience rather than something
+            hidden behind it.
         </p>
 
     </div>
 
 
-    <!-- CORE -->
+    <div class="brain">
 
-    <div class="hero-core">
+        <div class="orbit"></div>
 
-        <div class="core-inner"></div>
+        <div class="brain-core"></div>
 
-        <div class="core-data">
+        <span class="brain-label label-one">
+            CYBERBRAIN / ACTIVE
+        </span>
 
-            CORE SIGNAL<br>
-            <strong>100.00%</strong>
+        <span class="brain-label label-two">
+            NEURAL LINK: 87%
+        </span>
+
+        <span class="brain-label label-three">
+            ↳
+        </span>
+
+    </div>
+
+</section>
+
+
+<!-- ==================================================
+     PROJECTS
+================================================== -->
+
+<section class="projects-section" id="projects">
+
+    <div class="section-index">
+        01 / MEMORY ARCHIVE
+    </div>
+
+    <h2 class="section-title">
+        SELECT<br>
+        MEMORY
+    </h2>
+
+
+    <div class="project-interface">
+
+        <div class="project-list">
+
+            <div class="project-item active" data-project="0">
+                <div class="project-number">MEM_001</div>
+                <div class="project-name">NEON / 01</div>
+                <div class="project-type">DIGITAL EXPERIENCE</div>
+            </div>
+
+            <div class="project-item" data-project="1">
+                <div class="project-number">MEM_002</div>
+                <div class="project-name">VOID / 02</div>
+                <div class="project-type">BRAND SYSTEM</div>
+            </div>
+
+            <div class="project-item" data-project="2">
+                <div class="project-number">MEM_003</div>
+                <div class="project-name">SYNTH / 03</div>
+                <div class="project-type">INTERFACE</div>
+            </div>
+
+            <div class="project-item" data-project="3">
+                <div class="project-number">MEM_004</div>
+                <div class="project-name">GHOST / 04</div>
+                <div class="project-type">EXPERIMENTAL</div>
+            </div>
+
+        </div>
+
+
+        <div class="project-view">
+
+            <div class="project-visual">
+
+                <div class="visual-shape"></div>
+
+            </div>
+
+            <div class="project-meta">
+
+                <span id="projectTitle">
+                    NEON / 01
+                </span>
+
+                <span id="projectDescription">
+                    DIGITAL ENVIRONMENT
+                </span>
+
+                <span id="projectYear">
+                    2026
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ==================================================
+     ABOUT
+================================================== -->
+
+<section id="about">
+
+    <div class="section-index">
+        02 / IDENTITY
+    </div>
+
+    <h2 class="section-title">
+        WHO<br>
+        AM I?
+    </h2>
+
+
+    <div class="profile-grid">
+
+        <div class="profile-cell" data-index="A1">
+
+            <div class="profile-label">
+                DESIGNATION
+            </div>
+
+            <div class="profile-value">
+                Creative Developer
+            </div>
+
+        </div>
+
+
+        <div class="profile-cell" data-index="A2">
+
+            <div class="profile-label">
+                LOCATION
+            </div>
+
+            <div class="profile-value">
+                EARTH / REMOTE
+            </div>
+
+        </div>
+
+
+        <div class="profile-cell" data-index="A3">
+
+            <div class="profile-label">
+                SPECIALIZATION
+            </div>
+
+            <p class="profile-description">
+                Digital interfaces, interaction design,
+                creative development, motion, identity,
+                experimental web experiences.
+            </p>
+
+        </div>
+
+
+        <div class="profile-cell" data-index="A4">
+
+            <div class="profile-label">
+                OPERATING PRINCIPLE
+            </div>
+
+            <p class="profile-description">
+                Do not decorate the interface.
+                Make the interface part of the world.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ==================================================
+     SKILLS
+================================================== -->
+
+<section id="skills">
+
+    <div class="section-index">
+        03 / CAPABILITIES
+    </div>
+
+    <h2 class="section-title">
+        SYSTEM<br>
+        CAPABILITIES
+    </h2>
+
+
+    <div class="skills-layout">
+
+        <div>
+
+            <div class="skill">
+
+                <div class="skill-header">
+                    <span>INTERACTION DESIGN</span>
+                    <span>94%</span>
+                </div>
+
+                <div class="skill-bar">
+                    <div class="skill-fill" style="width:94%"></div>
+                </div>
+
+            </div>
+
+
+            <div class="skill">
+
+                <div class="skill-header">
+                    <span>FRONT-END DEVELOPMENT</span>
+                    <span>91%</span>
+                </div>
+
+                <div class="skill-bar">
+                    <div class="skill-fill" style="width:91%"></div>
+                </div>
+
+            </div>
+
+
+            <div class="skill">
+
+                <div class="skill-header">
+                    <span>VISUAL DESIGN</span>
+                    <span>96%</span>
+                </div>
+
+                <div class="skill-bar">
+                    <div class="skill-fill" style="width:96%"></div>
+                </div>
+
+            </div>
+
+
+            <div class="skill">
+
+                <div class="skill-header">
+                    <span>MOTION / 3D</span>
+                    <span>82%</span>
+                </div>
+
+                <div class="skill-bar">
+                    <div class="skill-fill" style="width:82%"></div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="data-block">
+
+            <p>
+                // AVAILABLE PROTOCOLS
+            </p>
+
+            <p>
+                HTML / CSS / JAVASCRIPT
+            </p>
+
+            <p>
+                WEBGL / THREE.JS
+            </p>
+
+            <p>
+                FIGMA / BLENDER
+            </p>
+
+            <p>
+                MOTION / INTERACTION
+            </p>
 
             <br>
 
-            SYNCHRONIZATION<br>
-            <strong>STABLE</strong>
-
-        </div>
-
-    </div>
-
-
-    <!-- SMALL HEX DATA -->
-
-    <div class="hero-node one">
-
-        NODE 01<br>
-        <b>ACTIVE</b>
-
-    </div>
-
-    <div class="hero-node two">
-
-        NODE 02<br>
-        <b>ONLINE</b>
-
-    </div>
-
-    <div class="hero-node three">
-
-        NODE 03<br>
-        <b>SYNC</b>
-
-    </div>
-
-</section>
-
-
-
-<!-- =========================================================
-     PROJECTS
-========================================================= -->
-
-<section
-    id="projects"
-    class="section"
->
-
-    <div class="section-code">
-        TARGET DATABASE // PROJECT ARCHIVE
-    </div>
-
-    <h2 class="section-title">
-        PRO<span>JECTS</span>
-    </h2>
-
-
-    <div class="project-system">
-
-
-        <!-- CENTRAL HEX -->
-
-        <div class="project-core"></div>
-
-
-        <!-- DATA CLOUD -->
-
-        <div class="data-cloud cloud-one">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-
-
-        <div class="data-cloud cloud-two">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-
-
-        <!-- PROJECT 01 -->
-
-        <article class="project project-1">
-
-            <div class="project-number">
-                TARGET // 001
-            </div>
-
-            <div class="project-image">
-
-                <img
-                    src="dnd world my/atachment/Pasted image 20250903191839.png"
-                    alt="Project One"
-                >
-
-            </div>
-
-            <h3>
-                Project<br>
-                One
-            </h3>
-
             <p>
-                A short description of what this project does,
-                what problem it solves and why it was built.
-            </p>
-
-            <div class="project-tags">
-
-                <span>HTML</span>
-                <span>CSS</span>
-                <span>JAVASCRIPT</span>
-
-            </div>
-
-            <div class="project-links">
-
-                <a href="#">
-                    LIVE →
-                </a>
-
-                <a href="#">
-                    GITHUB →
-                </a>
-
-            </div>
-
-        </article>
-
-
-        <!-- PROJECT 02 -->
-
-        <article class="project project-2">
-
-            <div class="project-number">
-                TARGET // 002
-            </div>
-
-            <h3>
-                Project<br>
-                Two
-            </h3>
-
-            <p>
-                A modern web application built to make
-                a specific workflow faster and easier.
-            </p>
-
-            <div class="project-tags">
-
-                <span>REACT</span>
-                <span>TYPESCRIPT</span>
-                <span>API</span>
-
-            </div>
-
-            <div class="project-links">
-
-                <a href="#">
-                    LIVE →
-                </a>
-
-                <a href="#">
-                    GITHUB →
-                </a>
-
-            </div>
-
-        </article>
-
-
-        <!-- PROJECT 03 -->
-
-        <article class="project project-3">
-
-            <div class="project-number">
-                TARGET // 003 // EXPERIMENTAL
-            </div>
-
-            <h3>
-                Project<br>
-                Three
-            </h3>
-
-            <p>
-                An experimental project exploring new ideas,
-                technologies and interaction patterns.
-            </p>
-
-            <div class="project-tags">
-
-                <span>PYTHON</span>
-                <span>AI</span>
-
-            </div>
-
-            <div class="project-links">
-
-                <a href="#">
-                    VIEW →
-                </a>
-
-            </div>
-
-        </article>
-
-
-        <!-- PROJECT 04 -->
-
-        <article class="project project-4">
-
-            <div class="project-number">
-                TARGET // 004
-            </div>
-
-            <h3>
-                Project<br>
-                Four
-            </h3>
-
-            <p>
-                Another project description. Explain the idea,
-                technology and result in a few sentences.
-            </p>
-
-            <div class="project-tags">
-
-                <span>NEXT.JS</span>
-                <span>NODE.JS</span>
-
-            </div>
-
-            <div class="project-links">
-
-                <a href="#">
-                    LIVE →
-                </a>
-
-                <a href="#">
-                    GITHUB →
-                </a>
-
-            </div>
-
-        </article>
-
-    </div>
-
-</section>
-
-
-
-<!-- =========================================================
-     ABOUT
-========================================================= -->
-
-<section
-    id="about"
-    class="section"
->
-
-    <div class="section-code">
-        PERSONNEL DATABASE // T0KAKU
-    </div>
-
-    <h2 class="section-title">
-        AB<span>OUT</span>
-    </h2>
-
-
-    <div class="about-system">
-
-
-        <div class="about-text">
-
-            <h3>
-                <span>IDEA</span><br>
-                TO<br>
-                FORM
-            </h3>
-
-            <p>
-                I'm a developer who enjoys turning ideas into
-                simple, functional and polished digital products.
+                // PRIMARY OBJECTIVE
             </p>
 
             <p>
-                I care about good design, clean code and building
-                experiences that feel effortless to use.
+                CREATE EXPERIENCES THAT
+                FEEL LIKE THEY SHOULD NOT
+                EXIST IN A BROWSER.
             </p>
 
-        </div>
-
-
-        <div class="personnel-core">
-
-            <div class="personnel-hex">
-
-                <div class="personnel-id">
-
-                    PERSONNEL FILE<br>
-                    ----------------<br>
-                    ID // T0KAKU<br>
-                    TYPE // CREATOR
-
-                </div>
-
-                <div class="personnel-name">
-                    T0
-                </div>
-
-                <div class="personnel-status">
-
-                    DESIGN // ACTIVE<br>
-                    CODE // ACTIVE<br>
-                    IDEAS // ACTIVE<br>
-
-                    <strong>
-                        STATUS // ONLINE
-                    </strong>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- TECHNOLOGY -->
-
-    <div class="technology">
-
-        <div class="tech">
-            <small>001</small>
-            <strong>HTML</strong>
-        </div>
-
-        <div class="tech">
-            <small>002</small>
-            <strong>CSS</strong>
-        </div>
-
-        <div class="tech">
-            <small>003</small>
-            <strong>JAVASCRIPT</strong>
-        </div>
-
-        <div class="tech">
-            <small>004</small>
-            <strong>TYPESCRIPT</strong>
-        </div>
-
-        <div class="tech">
-            <small>005</small>
-            <strong>REACT</strong>
-        </div>
-
-        <div class="tech">
-            <small>006</small>
-            <strong>NEXT.JS</strong>
-        </div>
-
-        <div class="tech">
-            <small>007</small>
-            <strong>NODE.JS</strong>
-        </div>
-
-        <div class="tech">
-            <small>008</small>
-            <strong>PYTHON</strong>
-        </div>
-
-        <div class="tech">
-            <small>009</small>
-            <strong>GIT</strong>
         </div>
 
     </div>
@@ -2153,81 +1243,249 @@ er kutter filer / 3D fil
 </section>
 
 
-
-<!-- =========================================================
+<!-- ==================================================
      CONTACT
-========================================================= -->
+================================================== -->
 
-<section
-    id="contact"
-    class="section contact"
->
+<section class="contact" id="contact">
 
-    <div class="contact-hex"></div>
+    <div>
 
-    <div class="contact-inner">
-
-        <div class="contact-code">
-            ◆ COMMUNICATION CHANNEL // OPEN
+        <div class="section-index">
+            04 / OPEN CHANNEL
         </div>
 
         <h2>
-            HAVE<br>
-            <span>AN</span><br>
-            IDEA?
+            CONNECT<br>
+            <span>WITH ME.</span>
         </h2>
 
-        <p class="contact-text">
-            Have an idea, project or opportunity?
-            Establish a communication channel and
-            initiate transmission.
+        <p class="contact-copy">
+            A signal has been detected.
+            If you're building something strange,
+            ambitious or impossible-looking,
+            establish a connection.
         </p>
 
         <a
-            href="mailto:T0kaku@proton.me"
-            class="contact-button"
+            href="mailto:hello@example.com"
+            class="contact-link"
         >
-            INITIATE TRANSMISSION →
+            ESTABLISH CONNECTION →
         </a>
 
     </div>
 
 </section>
-
-
-
-<!-- =========================================================
-     FOOTER
-========================================================= -->
-
-<footer>
-
-    <span>
-        T0KAKU // HEX SYSTEM // 2026
-    </span>
-
-    <div class="socials">
-
-        <a href="#">
-            GITHUB
-        </a>
-
-        <a href="#">
-            LINKEDIN
-        </a>
-
-        <a href="#">
-            X
-        </a>
-
-    </div>
-
-</footer>
-
 
 </main>
 
 
+<!-- FLOATING TELEMETRY -->
+
+<div class="data-corner">
+
+    SIGNAL // STABLE<br>
+    ENCRYPTION // AES-256<br>
+    NODE // 07<br>
+    <span id="coordinates">35.6895 / 139.6917</span>
+
+</div>
+
+
+<script>
+
+/* --------------------------------------------------
+   CLOCK
+-------------------------------------------------- */
+
+function updateClock() {
+
+    const now = new Date();
+
+    const time =
+        now.getHours().toString().padStart(2, "0") +
+        ":" +
+        now.getMinutes().toString().padStart(2, "0") +
+        ":" +
+        now.getSeconds().toString().padStart(2, "0");
+
+    document.getElementById("clock").textContent = time;
+}
+
+setInterval(updateClock, 1000);
+updateClock();
+
+
+/* --------------------------------------------------
+   PROJECT MEMORY SYSTEM
+-------------------------------------------------- */
+
+const projects = [
+    {
+        title: "NEON / 01",
+        description: "DIGITAL ENVIRONMENT",
+        year: "2026"
+    },
+
+    {
+        title: "VOID / 02",
+        description: "BRAND SYSTEM",
+        year: "2025"
+    },
+
+    {
+        title: "SYNTH / 03",
+        description: "INTERFACE ARCHITECTURE",
+        year: "2025"
+    },
+
+    {
+        title: "GHOST / 04",
+        description: "EXPERIMENTAL SYSTEM",
+        year: "2024"
+    }
+];
+
+
+const projectItems =
+    document.querySelectorAll(".project-item");
+
+projectItems.forEach(item => {
+
+    item.addEventListener("click", () => {
+
+        projectItems.forEach(i =>
+            i.classList.remove("active")
+        );
+
+        item.classList.add("active");
+
+        const project =
+            projects[item.dataset.project];
+
+        document.getElementById("projectTitle")
+            .textContent = project.title;
+
+        document.getElementById("projectDescription")
+            .textContent = project.description;
+
+        document.getElementById("projectYear")
+            .textContent = project.year;
+
+    });
+
+});
+
+
+/* --------------------------------------------------
+   NAVIGATION
+-------------------------------------------------- */
+
+const navButtons =
+    document.querySelectorAll(".nav button");
+
+navButtons.forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        document
+            .getElementById(button.dataset.target)
+            .scrollIntoView({
+                behavior: "smooth"
+            });
+
+    });
+
+});
+
+
+/* --------------------------------------------------
+   ACTIVE NAVIGATION
+-------------------------------------------------- */
+
+const sections =
+    document.querySelectorAll("section");
+
+const observer =
+    new IntersectionObserver(entries => {
+
+        entries.forEach(entry => {
+
+            if (!entry.isIntersecting)
+                return;
+
+            navButtons.forEach(button => {
+
+                button.classList.toggle(
+                    "active",
+                    button.dataset.target === entry.target.id
+                );
+
+            });
+
+        });
+
+    }, {
+        threshold: .55
+    });
+
+sections.forEach(section =>
+    observer.observe(section)
+);
+
+
+/* --------------------------------------------------
+   MOUSE SYSTEM
+-------------------------------------------------- */
+
+document.addEventListener("mousemove", event => {
+
+    const x =
+        (event.clientX / window.innerWidth - .5);
+
+    const y =
+        (event.clientY / window.innerHeight - .5);
+
+    const brain =
+        document.querySelector(".brain-core");
+
+    if (brain) {
+
+        brain.style.transform =
+            `translate(${x * 8}px, ${y * 8}px) rotate(45deg)`;
+
+    }
+
+});
+
+
+/* --------------------------------------------------
+   RANDOM SIGNAL GLITCH
+-------------------------------------------------- */
+
+const ghost =
+    document.querySelector(".ghost");
+
+setInterval(() => {
+
+    if (Math.random() > .7) {
+
+        ghost.style.textShadow =
+            `
+            ${Math.random() * 8 - 4}px 0 var(--cyan),
+            ${Math.random() * -8 + 4}px 0 var(--red)
+            `;
+
+        setTimeout(() => {
+            ghost.style.textShadow = "none";
+        }, 100);
+
+    }
+
+}, 1400);
+
+</script>
+
 </body>
 </html>
-```
